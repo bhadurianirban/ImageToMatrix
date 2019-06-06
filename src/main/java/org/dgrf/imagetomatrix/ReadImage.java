@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.MatrixUtils;
 import static org.dgrf.imagetomatrix.COLORCCHOICE.BLUE;
 import static org.dgrf.imagetomatrix.COLORCCHOICE.GREEN;
 import static org.dgrf.imagetomatrix.COLORCCHOICE.RED;
@@ -29,6 +30,7 @@ public class ReadImage {
     private final String imageFilePath;
     private BufferedImage image;
     private Array2DRowRealMatrix colorMatrix;
+
     public ReadImage(String imageFilePath) {
         this.imageFilePath = imageFilePath;
         readImage();
@@ -56,47 +58,52 @@ public class ReadImage {
 
     private void getClourMatrix(COLORCCHOICE color) {
 
-        int w = image.getWidth();
-        int h = image.getHeight();
-        System.out.println("width, height: " + w + ", " + h);
-        colorMatrix = new Array2DRowRealMatrix(w, h);
-        if (null != color) switch (color) {
-            case RED:
-                for (int i = 0; i < h; i++) {
-                    for (int j = 0; j < w; j++) {
-                        
-                        int pixel = image.getRGB(j, i);
-                        int red = (pixel >> 16) & 0xff;
-                        colorMatrix.setEntry(j, i, Double.valueOf(red));
+        int columnDimension = image.getWidth();
+        int rowDimension = image.getHeight();
+        System.out.println("width, height: " + columnDimension + ", " +rowDimension );
+        colorMatrix = new Array2DRowRealMatrix(rowDimension,columnDimension);
+        if (null != color) {
+            switch (color) {
+                case RED:
+                    for (int col = 0; col < columnDimension; col++) {
+                        for (int row = 0; row < rowDimension; row++) {
+
+                            int pixel = image.getRGB(col, row);//note that col is x and row is y 0 0 is the top left position so it is row 0 and col 0
+                            int red = (pixel >> 16) & 0xff;
+                            colorMatrix.setEntry(row, col, Double.valueOf(red));
+                        }
                     }
-                }   break;
-            case GREEN:
-                for (int i = 0; i < h; i++) {
-                    for (int j = 0; j < w; j++) {
-                        
-                        int pixel = image.getRGB(i, j);
-                        int green = (pixel >> 8) & 0xff;
-                        colorMatrix.setEntry(j, i, Double.valueOf(green));
+                    break;
+                case GREEN:
+                    for (int col = 0; col < columnDimension; col++) {
+                        for (int row = 0; row < rowDimension; row++) {
+
+                            int pixel = image.getRGB(col, row);//note that col is x and row is y 0 0 is the top left position so it is row 0 and col 0
+                            int green = (pixel >> 8) & 0xff;
+                            colorMatrix.setEntry(row, col, Double.valueOf(green));
+                        }
                     }
-                }   break;
-            case BLUE:
-                for (int i = 0; i < h; i++) {
-                    for (int j = 0; j < w; j++) {
-                        
-                        int pixel = image.getRGB(i, j);
-                        int blue = (pixel) & 0xff;
-                        colorMatrix.setEntry(j, i, Double.valueOf(blue));
+                    break;
+                case BLUE:
+                    for (int col = 0; col < columnDimension; col++) {
+                        for (int row = 0; row < rowDimension; row++) {
+
+                            int pixel = image.getRGB(col, row);//note that col is x and row is y 0 0 is the top left position so it is row 0 and col 0
+                            int blue = (pixel) & 0xff;
+                            colorMatrix.setEntry(row, col, Double.valueOf(blue));
+                        }
                     }
-                }   break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
+            }
         }
 
     }
 
     private void printColorMatrix() {
-        
-        System.out.println(colorMatrix.toString());
+
+        System.out.println("colum" + colorMatrix.getColumnDimension() + "row " + colorMatrix.getRowDimension());
     }
 
     private void printPixelARGB(int pixel) {
@@ -107,5 +114,4 @@ public class ReadImage {
         System.out.println("argb: " + alpha + ", " + red + ", " + green + ", " + blue);
     }
 
-    
 }
