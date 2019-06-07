@@ -3,6 +3,8 @@ package org.dgrf.imagetomatrix;
 import java.util.Arrays;
 import java.util.OptionalDouble;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.RealMatrix;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,9 +18,9 @@ import org.apache.commons.lang3.ArrayUtils;
 public class Driver {
 
     public static void main(String args[]) {
-        String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
-        Double d = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
-        System.out.println("red average"+d);
+        //String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+        //Double d = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
+        //System.out.println("red average"+d);
         
 //        Double scaleMax = 1920.0;
 //        Double scaleMin = 16.0;
@@ -34,12 +36,16 @@ public class Driver {
             {1, 2, 3, 6},
             {4, 5, 6, 9},
             {7, 2, 1, 2},};
-        double flatArray[] = Arrays.stream(a)
-        .flatMapToDouble(Arrays::stream)
-        .toArray();
-        double s = Arrays.stream(flatArray).average().getAsDouble();
-        System.out.println("Numbers = " + s);
-
+//        double flatArray[] = Arrays.stream(a)
+//        .flatMapToDouble(Arrays::stream)
+//        .toArray();
+//        double s = Arrays.stream(flatArray).average().getAsDouble();
+//        System.out.println("Numbers = " + s);
+        RealMatrix d = new RandomWalkMatix(a).getMeanSubtractedMatrix();
+        for (int row = 0;row< d.getRowDimension();row++) {
+            double rowV[] = d.getRow(row);
+            System.out.println(ArrayUtils.toString(rowV));
+        }
     }
 
 }

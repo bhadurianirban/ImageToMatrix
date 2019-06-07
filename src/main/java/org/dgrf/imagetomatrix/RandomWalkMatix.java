@@ -8,41 +8,91 @@ package org.dgrf.imagetomatrix;
 import java.util.Arrays;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
 
 /**
  *
  * @author bhaduri
  */
 public class RandomWalkMatix {
-    private final Array2DRowRealMatrix origMatrix;
-    private Array2DRowRealMatrix randomWalkMatrix;
+
+    private final RealMatrix origMatrix;
+    private RealMatrix randomWalkMatrix;
+    private RealMatrix meanSubtractedMatrix;
     private Double matrixMean;
 
     public RandomWalkMatix(Array2DRowRealMatrix origMatrix) {
         this.origMatrix = origMatrix;
-        
+
     }
-    private void  prepareMatrixMean () {
-        
+
+    public RandomWalkMatix(double[][] origMatrix) {
+        this.origMatrix = new Array2DRowRealMatrix(origMatrix);
+
+    }
+
+    private void prepareMatrixMean() {
+
         double mat[][] = origMatrix.getData();
-        
+
         double flatArray[] = Arrays.stream(mat)
-        .flatMapToDouble(Arrays::stream)
-        .toArray();
+                .flatMapToDouble(Arrays::stream)
+                .toArray();
         matrixMean = Arrays.stream(flatArray).average().getAsDouble();
         //System.out.println(s);
     }
+
     private void cumulateMatrix() {
+        int columnCount = origMatrix.getColumnDimension();
+        int rowCount = origMatrix.getRowDimension();
+        double randomWalkMatrixD[][] = new double[rowCount][columnCount];
+        randomWalkMatrix = new Array2DRowRealMatrix(rowCount, columnCount);
+        for (int row = 0; row < rowCount; row++) {
+            for (int col = 0; col < columnCount; col++) {
+                if (row == 0 && col==0) {
+                    //randomWalkMatrixD[row][col] = origMatrix.getEntry(row, col);
+                    double cumValue = origMatrix.getEntry(row, col);
+                    randomWalkMatrix.setEntry(row, col, cumValue);
+                } else if (row == 0 && col!=0) {
+                    double cumValue = randomWalkMatrix.getEntry(0, col - 1) + origMatrix.getEntry(row, col);
+                    randomWalkMatrix.setEntry(row, col, cumValue);
+                } else if (col == 0 && row!=0) {
+                    double cumValue = randomWalkMatrix.getEntry(row -1, 0) + origMatrix.getEntry(row, col);
+                    randomWalkMatrix.setEntry(row, col, cumValue);
+                } else {
+                    double cumValue =  randomWalkMatrix.getEntry(row , col - 1)
+                                     + randomWalkMatrix.getEntry(row-1 , col)
+                                     + origMatrix.getEntry(row, col);
+                    randomWalkMatrix.setEntry(row, col, cumValue);
+                }
+
+            }
+
+        }
         
     }
+
     public Double getMatrixMean() {
         prepareMatrixMean();
         return matrixMean;
     }
-    
-    private void getCumulativeRowColumnValue(int row,int col) {
-        
+
+    public RealMatrix getRandomWalkMatrix() {
+        prepareMatrixMean();
+        cumulateMatrix();
+        return randomWalkMatrix;
+    }
+    private void prepareMeanSubtractedMatrix() {
+        prepareMatrixMean();
+        meanSubtractedMatrix = origMatrix.scalarAdd(0-matrixMean);
+    }
+
+    public RealMatrix getMeanSubtractedMatrix() {
+        prepareMeanSubtractedMatrix();
+        return meanSubtractedMatrix;
     }
     
     
+
 }
