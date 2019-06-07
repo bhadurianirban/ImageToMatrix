@@ -16,8 +16,10 @@ import org.apache.commons.lang3.ArrayUtils;
 public class Driver {
 
     public static void main(String args[]) {
-        //String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
-        //ReadImage readImage = new ReadImage(imageFilePath);
+        String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+        Double d = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
+        System.out.println("red average"+d);
+        
 //        Double scaleMax = 1920.0;
 //        Double scaleMin = 16.0;
 //        int ScaleNumber = 19;
@@ -36,7 +38,7 @@ public class Driver {
         .flatMapToDouble(Arrays::stream)
         .toArray();
         double s = Arrays.stream(flatArray).average().getAsDouble();
-        System.out.println("Numbers = " + ArrayUtils.toString(flatArray));
+        System.out.println("Numbers = " + s);
 
     }
 

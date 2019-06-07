@@ -30,6 +30,7 @@ public class ReadImage {
     private final String imageFilePath;
     private BufferedImage image;
     private Array2DRowRealMatrix colorMatrix;
+    private RandomWalkMatix randomWalkMatix;
 
     public ReadImage(String imageFilePath) {
         this.imageFilePath = imageFilePath;
@@ -40,8 +41,8 @@ public class ReadImage {
         try {
             // the line that reads the image file
             image = ImageIO.read(new File(imageFilePath));
-            getClourMatrix(RED);
-            printColorMatrix();
+            prepareClourMatrix(RED);
+            //printColorMatrix();
 //            for (int i = 0; i < h; i++) {
 //                for (int j = 0; j < w; j++) {
 //                    System.out.println("x,y: " + j + ", " + i);
@@ -56,7 +57,7 @@ public class ReadImage {
         }
     }
 
-    private void getClourMatrix(COLORCCHOICE color) {
+    private void prepareClourMatrix(COLORCCHOICE color) {
 
         int columnDimension = image.getWidth();
         int rowDimension = image.getHeight();
@@ -99,6 +100,11 @@ public class ReadImage {
             }
         }
 
+    }
+
+    public RandomWalkMatix getRandomWalkMatix() {
+        randomWalkMatix = new RandomWalkMatix(colorMatrix);
+        return randomWalkMatix;
     }
 
     private void printColorMatrix() {

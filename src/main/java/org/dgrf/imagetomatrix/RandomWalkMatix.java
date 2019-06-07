@@ -14,23 +14,35 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
  * @author bhaduri
  */
 public class RandomWalkMatix {
-    private Array2DRowRealMatrix origMatrix;
+    private final Array2DRowRealMatrix origMatrix;
     private Array2DRowRealMatrix randomWalkMatrix;
     private Double matrixMean;
 
     public RandomWalkMatix(Array2DRowRealMatrix origMatrix) {
         this.origMatrix = origMatrix;
+        
     }
-    private void getMatrixMean () {
-        int rowCount = origMatrix.getRowDimension();
-        int colCount = origMatrix.getRowDimension();
+    private void  prepareMatrixMean () {
+        
         double mat[][] = origMatrix.getData();
         
-        Double sum=0.0;
-        for (int row=0;row<rowCount;row++) {
-            double rowData[]=origMatrix.getRow(row);
-            //sum = Double.valueOf(Arrays.stream(mat).
-        }
+        double flatArray[] = Arrays.stream(mat)
+        .flatMapToDouble(Arrays::stream)
+        .toArray();
+        matrixMean = Arrays.stream(flatArray).average().getAsDouble();
+        //System.out.println(s);
     }
+    private void cumulateMatrix() {
+        
+    }
+    public Double getMatrixMean() {
+        prepareMatrixMean();
+        return matrixMean;
+    }
+    
+    private void getCumulativeRowColumnValue(int row,int col) {
+        
+    }
+    
     
 }
