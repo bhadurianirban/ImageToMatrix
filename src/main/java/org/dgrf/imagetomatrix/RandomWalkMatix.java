@@ -44,26 +44,26 @@ public class RandomWalkMatix {
     }
 
     private void cumulateMatrix() {
-        int columnCount = origMatrix.getColumnDimension();
-        int rowCount = origMatrix.getRowDimension();
-        double randomWalkMatrixD[][] = new double[rowCount][columnCount];
+        int columnCount = meanSubtractedMatrix.getColumnDimension();
+        int rowCount = meanSubtractedMatrix.getRowDimension();
+        //double randomWalkMatrixD[][] = new double[rowCount][columnCount];
         randomWalkMatrix = new Array2DRowRealMatrix(rowCount, columnCount);
         for (int row = 0; row < rowCount; row++) {
             for (int col = 0; col < columnCount; col++) {
                 if (row == 0 && col==0) {
                     //randomWalkMatrixD[row][col] = origMatrix.getEntry(row, col);
-                    double cumValue = origMatrix.getEntry(row, col);
+                    double cumValue = meanSubtractedMatrix.getEntry(row, col);
                     randomWalkMatrix.setEntry(row, col, cumValue);
                 } else if (row == 0 && col!=0) {
-                    double cumValue = randomWalkMatrix.getEntry(0, col - 1) + origMatrix.getEntry(row, col);
+                    double cumValue = randomWalkMatrix.getEntry(0, col - 1) + meanSubtractedMatrix.getEntry(row, col);
                     randomWalkMatrix.setEntry(row, col, cumValue);
                 } else if (col == 0 && row!=0) {
-                    double cumValue = randomWalkMatrix.getEntry(row -1, 0) + origMatrix.getEntry(row, col);
+                    double cumValue = randomWalkMatrix.getEntry(row -1, 0) + meanSubtractedMatrix.getEntry(row, col);
                     randomWalkMatrix.setEntry(row, col, cumValue);
                 } else {
                     double cumValue =  randomWalkMatrix.getEntry(row , col - 1)
                                      + randomWalkMatrix.getEntry(row-1 , col)
-                                     + origMatrix.getEntry(row, col);
+                                     + meanSubtractedMatrix.getEntry(row, col);
                     randomWalkMatrix.setEntry(row, col, cumValue);
                 }
 
@@ -78,8 +78,8 @@ public class RandomWalkMatix {
         return matrixMean;
     }
 
-    public RealMatrix getRandomWalkMatrix() {
-        prepareMatrixMean();
+    public RealMatrix getCumulativeMatrix() {
+        prepareMeanSubtractedMatrix();
         cumulateMatrix();
         return randomWalkMatrix;
     }
@@ -93,6 +93,11 @@ public class RandomWalkMatix {
         return meanSubtractedMatrix;
     }
     
+    public FQ makeFQ() {
+        prepareMeanSubtractedMatrix();
+        cumulateMatrix();
+        return new FQ(randomWalkMatrix);
+    }
     
 
 }
