@@ -16,12 +16,13 @@ import org.apache.commons.math3.linear.RealMatrix;
 public class Driver {
 
     public static void main(String args[]) {
-        String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+        String imageFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
         //Double d = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
         //Double mean = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMatrixMean();
         //RealMatrix d = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMeanSubtractedMatrix();
         List<MatrixScale> matrixScales = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).FQ().getScales();
         matrixScales.stream().forEach(m -> System.out.println(m.getColumnScaleSize()+" "+m.getRowScaleSize()));
+        new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).FQ().getSubMatricsCoordinatesForAllScales();
         //System.out.println("red average"+mean);
         
 //        Double scaleMax = 1920.0;
