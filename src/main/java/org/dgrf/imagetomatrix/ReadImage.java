@@ -11,19 +11,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
-import static org.dgrf.imagetomatrix.COLORCCHOICE.BLUE;
-import static org.dgrf.imagetomatrix.COLORCCHOICE.GREEN;
-import static org.dgrf.imagetomatrix.COLORCCHOICE.RED;
+
 
 /**
  *
  * @author dgrfi
  */
-enum COLORCCHOICE {
-    RED,
-    GREEN,
-    BLUE
-}
+
 
 public class ReadImage {
 
@@ -34,14 +28,14 @@ public class ReadImage {
 
     public ReadImage(String imageFilePath) {
         this.imageFilePath = imageFilePath;
-        readImage();
+        
     }
 
-    private void readImage() {
+    private void readImage(COLORCCHOICE color) {
         try {
             // the line that reads the image file
             image = ImageIO.read(new File(imageFilePath));
-            prepareClourMatrix(RED);
+            prepareClourMatrix(color);
             //printColorMatrix();
 //            for (int i = 0; i < h; i++) {
 //                for (int j = 0; j < w; j++) {
@@ -61,7 +55,7 @@ public class ReadImage {
 
         int columnDimension = image.getWidth();
         int rowDimension = image.getHeight();
-        System.out.println("width, height: " + columnDimension + ", " +rowDimension );
+        //System.out.println("width, height: " + columnDimension + ", " +rowDimension );
         colorMatrix = new Array2DRowRealMatrix(rowDimension,columnDimension);
         if (null != color) {
             switch (color) {
@@ -102,7 +96,9 @@ public class ReadImage {
 
     }
 
-    public RandomWalkMatix getRandomWalkMatix() {
+    
+    public RandomWalkMatix randomWalkMatix(COLORCCHOICE colorcchoice) {
+        readImage(colorcchoice);
         randomWalkMatix = new RandomWalkMatix(colorMatrix);
         return randomWalkMatix;
     }

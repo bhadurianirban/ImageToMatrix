@@ -1,9 +1,7 @@
 package org.dgrf.imagetomatrix;
 
-import java.util.Arrays;
-import java.util.OptionalDouble;
+import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 
 /*
@@ -18,11 +16,13 @@ import org.apache.commons.math3.linear.RealMatrix;
 public class Driver {
 
     public static void main(String args[]) {
-        String imageFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+        String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
         //Double d = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
-        Double mean = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
-        RealMatrix d = new ReadImage(imageFilePath).getRandomWalkMatix().getMeanSubtractedMatrix();
-        System.out.println("red average"+mean);
+        //Double mean = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMatrixMean();
+        //RealMatrix d = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMeanSubtractedMatrix();
+        List<MatrixScale> matrixScales = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).FQ().getScales();
+        matrixScales.stream().forEach(m -> System.out.println(m.getColumnScaleSize()+" "+m.getRowScaleSize()));
+        //System.out.println("red average"+mean);
         
 //        Double scaleMax = 1920.0;
 //        Double scaleMin = 16.0;
@@ -44,6 +44,9 @@ public class Driver {
 //        double s = Arrays.stream(flatArray).average().getAsDouble();
 //        System.out.println("Numbers = " + s);
         //RealMatrix d = new RandomWalkMatix(a).getRandomWalkMatrix();
+        
+    }
+    public static void printMatrix(RealMatrix d) {
         for (int row = 0;row< d.getRowDimension();row++) {
             double rowV[] = d.getRow(row);
             System.out.println(ArrayUtils.toString(rowV));

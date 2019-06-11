@@ -93,7 +93,7 @@ public class RandomWalkMatix {
         return meanSubtractedMatrix;
     }
     
-    public FQ makeFQ() {
+    public FQ FQ() {
         prepareMeanSubtractedMatrix();
         cumulateMatrix();
         return new FQ(randomWalkMatrix);
