@@ -22,7 +22,7 @@ public class RandomWalkMatix {
     private RealMatrix meanSubtractedMatrix;
     private Double matrixMean;
 
-    public RandomWalkMatix(Array2DRowRealMatrix origMatrix) {
+    public RandomWalkMatix(RealMatrix origMatrix) {
         this.origMatrix = origMatrix;
 
     }

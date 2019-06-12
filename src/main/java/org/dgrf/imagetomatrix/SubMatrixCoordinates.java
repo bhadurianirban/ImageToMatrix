@@ -16,6 +16,13 @@ public class SubMatrixCoordinates {
     private int startColumn;
     private int endColumn;
 
+    public SubMatrixCoordinates(int startRow, int endRow, int startColumn, int endColumn) {
+        this.startRow = startRow;
+        this.endRow = endRow;
+        this.startColumn = startColumn;
+        this.endColumn = endColumn;
+    }
+    
     public int getStartRow() {
         return startRow;
     }
@@ -47,5 +54,9 @@ public class SubMatrixCoordinates {
     public void setEndColumn(int endColumn) {
         this.endColumn = endColumn;
     }
-
+    
+    public String toString () {
+        String s = this.startColumn+","+this.startRow+","+this.endColumn+","+this.endRow;
+        return s;
+    }
 }

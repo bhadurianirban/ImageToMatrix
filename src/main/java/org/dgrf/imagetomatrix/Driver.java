@@ -17,12 +17,15 @@ public class Driver {
 
     public static void main(String args[]) {
         String imageFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+        //String outFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/radhaGreen.csv";
+        //new ReadImage(imageFilePath).writeMatrixToFile(outFilePath,COLORCCHOICE.GREEN);
+        
         //Double d = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
         //Double mean = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMatrixMean();
         //RealMatrix d = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMeanSubtractedMatrix();
-        List<MatrixScale> matrixScales = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).FQ().getScales();
-        matrixScales.stream().forEach(m -> System.out.println(m.getColumnScaleSize()+" "+m.getRowScaleSize()));
-        new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).FQ().getSubMatricsCoordinatesForAllScales();
+        //List<MatrixScale> matrixScales = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).FQ().getScales();
+        //matrixScales.stream().forEach(m -> System.out.println(m.getColumnScaleSize()+" "+m.getRowScaleSize()));
+        new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).FQ().getFD();
         //System.out.println("red average"+mean);
         
 //        Double scaleMax = 1920.0;
@@ -47,11 +50,6 @@ public class Driver {
         //RealMatrix d = new RandomWalkMatix(a).getRandomWalkMatrix();
         
     }
-    public static void printMatrix(RealMatrix d) {
-        for (int row = 0;row< d.getRowDimension();row++) {
-            double rowV[] = d.getRow(row);
-            System.out.println(ArrayUtils.toString(rowV));
-        }
-    }
+    
 
 }

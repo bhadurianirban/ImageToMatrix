@@ -21,6 +21,7 @@ public class FQ {
     private Double columnScaleMin;
     private Double rowScaleMin;
     private List<MatrixScale> matrixScales;
+
     private int numberOfScales;
 
     public FQ(RealMatrix inputMatrix) {
@@ -31,7 +32,7 @@ public class FQ {
         numberOfScales = 19;
     }
 
-    private void prepareColumnScales() {
+    private void prepareMatrixScales() {
         Double columnExponentMin = LogUtil.logBaseK(columnScaleMin);
         Double columnExponentMax = LogUtil.logBaseK(columnScaleMax);
 
@@ -52,20 +53,68 @@ public class FQ {
     }
 
     public List<MatrixScale> getScales() {
-        prepareColumnScales();
+        prepareMatrixScales();
         return matrixScales;
     }
 
-    public void getSubMatricsCoordinatesForAllScales() {
-        prepareSubMatrixCoordinatesForAllScales();
+    private void prepareFD() {
+
+        //for (MatrixScale matrixScale : matrixScales) {
+        //for test begin
+        MatrixScale matrixScale = matrixScales.get(0);
+        //for test end
+        List<SubMatrixCoordinates> subMatrixCoordinatesList = prepareSubMatrixCoordinatesForAScale(matrixScale);
+
+        for (SubMatrixCoordinates subMatrixCoordinates : subMatrixCoordinatesList) {
+            prepareVariableAndObservations(subMatrixCoordinates);
+        }
+        //}
     }
 
-    private void prepareSubMatrixCoordinatesForAllScales() {
-        prepareColumnScales();
-        prepareSubMatrixCoordinates(matrixScales.get(18));
+    private void prepareVariableAndObservations(SubMatrixCoordinates subMatrixCoordinates) {
+        //here there are two independant variables which are the coordinates of the matrix so for x variables k = 2
+        //Let us declare an 2D array of 2 columns
+        //If start col and start row is 0,0 and end col and end row is 3,3 we will get a 2D array like this with 16 pairs
+        // {0,0}
+        // {0,1}
+        // {0,2}
+        // {0,3}
+        // {1,0}
+        // {1,1}
+        //....
+        // {3,3}
+        int startRow = subMatrixCoordinates.getStartRow();
+        int endRow = subMatrixCoordinates.getEndRow();
+        int startColumn = subMatrixCoordinates.getStartColumn();
+        int endColumn = subMatrixCoordinates.getEndColumn();
+        int width = endColumn - startColumn +1;
+        int height = endRow - startRow +1;
+        int totalObservations = width*height;
+        System.out.println("totalObservations "+totalObservations);
+        double x[][] = new double[totalObservations][2];
+        
+        
     }
 
-    private void prepareSubMatrixCoordinates(MatrixScale matrixScale) {
+    private ScaleMappedFD prepareMultiRegressionForAMatrix(RealMatrix m) {
+        Double xCoeff;
+        Double yCoeff;
+        Double intercept;
+        Double rSquare;
+        xCoeff = 1.0;
+        yCoeff = 2.0;
+        intercept = 3.0;
+        rSquare = 5.0;
+        ScaleMappedFD scaleMappedFD = new ScaleMappedFD(null, xCoeff, yCoeff, intercept, rSquare);
+        return scaleMappedFD;
+    }
+
+    public void getFD() {
+        prepareMatrixScales();
+        prepareFD();
+    }
+
+    private List<SubMatrixCoordinates> prepareSubMatrixCoordinatesForAScale(MatrixScale matrixScale) {
         int columnScaleSize = matrixScale.getColumnScaleSize();
         int rowScaleSize = matrixScale.getRowScaleSize();
         int columnCount = inputMatrix.getColumnDimension();
@@ -90,15 +139,20 @@ public class FQ {
             startRowIndexes.add(startRowIndex);
             endRowIndexes.add(endRowIndex);
         }
-        System.out.println("matrix size "+columnCount+" X "+rowCount);
-        int numOfPartitions =0 ;
-        for (int colSliceCounter = 0;colSliceCounter<noOfColumnSlices;colSliceCounter++) {
-            for (int rowSliceCounter=0;rowSliceCounter<noOfRowSlices;rowSliceCounter++) {
-                System.out.println("startcol "+ startColIndexes.get(colSliceCounter)+" startrow "+startRowIndexes.get(rowSliceCounter)+"endcol "+endColIndexes.get(colSliceCounter)+" endrow "+endRowIndexes.get(rowSliceCounter));
+        List<SubMatrixCoordinates> subMatrixCoordinatesList = new ArrayList<>();
+        int numOfPartitions = 0;
+        for (int colSliceCounter = 0; colSliceCounter < noOfColumnSlices; colSliceCounter++) {
+            for (int rowSliceCounter = 0; rowSliceCounter < noOfRowSlices; rowSliceCounter++) {
+                int startCol = startColIndexes.get(colSliceCounter);
+                int startRow = startRowIndexes.get(rowSliceCounter);
+                int endCol = endColIndexes.get(colSliceCounter);
+                int endRow = endRowIndexes.get(rowSliceCounter);
+                SubMatrixCoordinates subMatrixCoordinates = new SubMatrixCoordinates(startRow, endRow, startCol, endCol);
+                subMatrixCoordinatesList.add(subMatrixCoordinates);
                 numOfPartitions++;
             }
         }
-        System.out.println("No of Partitions "+numOfPartitions);
+        return subMatrixCoordinatesList;
     }
 
 }

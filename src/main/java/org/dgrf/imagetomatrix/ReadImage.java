@@ -7,10 +7,16 @@ package org.dgrf.imagetomatrix;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
 
 
 /**
@@ -23,7 +29,7 @@ public class ReadImage {
 
     private final String imageFilePath;
     private BufferedImage image;
-    private Array2DRowRealMatrix colorMatrix;
+    private RealMatrix colorMatrix;
     private RandomWalkMatix randomWalkMatix;
 
     public ReadImage(String imageFilePath) {
@@ -106,6 +112,21 @@ public class ReadImage {
     private void printColorMatrix() {
 
         System.out.println("colum" + colorMatrix.getColumnDimension() + "row " + colorMatrix.getRowDimension());
+    }
+    public void writeMatrixToFile (String fileName,COLORCCHOICE colorcchoice) {
+        readImage(colorcchoice);
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(fileName);
+            for (int row = 0;row< colorMatrix.getRowDimension();row++) {
+                double rowV[] = colorMatrix.getRow(row);
+                writer.println(ArrayUtils.toString(rowV));
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ReadImage.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            writer.close();
+        }
     }
 
     private void printPixelARGB(int pixel) {
