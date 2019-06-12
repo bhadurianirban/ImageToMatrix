@@ -79,12 +79,13 @@ public class RandomWalkMatix {
     }
 
     public RealMatrix getCumulativeMatrix() {
+        prepareMatrixMean();
         prepareMeanSubtractedMatrix();
         cumulateMatrix();
         return randomWalkMatrix;
     }
     private void prepareMeanSubtractedMatrix() {
-        prepareMatrixMean();
+        
         meanSubtractedMatrix = origMatrix.scalarAdd(0-matrixMean);
     }
 
@@ -94,6 +95,7 @@ public class RandomWalkMatix {
     }
     
     public FQ FQ() {
+        prepareMatrixMean();
         prepareMeanSubtractedMatrix();
         cumulateMatrix();
         return new FQ(randomWalkMatrix);

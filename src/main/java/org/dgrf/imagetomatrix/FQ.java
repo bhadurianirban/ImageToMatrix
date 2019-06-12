@@ -7,7 +7,12 @@ package org.dgrf.imagetomatrix;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.SingularMatrixException;
+import org.apache.commons.math3.stat.regression.MultipleLinearRegression;
+import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
 
 /**
  *
@@ -65,13 +70,11 @@ public class FQ {
         //for test end
         List<SubMatrixCoordinates> subMatrixCoordinatesList = prepareSubMatrixCoordinatesForAScale(matrixScale);
 
-        for (SubMatrixCoordinates subMatrixCoordinates : subMatrixCoordinatesList) {
-            prepareVariableAndObservations(subMatrixCoordinates);
-        }
-        //}
+        List<Double> rSqueredList = subMatrixCoordinatesList.stream().map(m -> prepareVariableAndObservations(m)).collect(Collectors.toList());
+        //rSqueredList.forEach(m -> System.out.println(m));
     }
 
-    private void prepareVariableAndObservations(SubMatrixCoordinates subMatrixCoordinates) {
+    private Double prepareVariableAndObservations(SubMatrixCoordinates subMatrixCoordinates) {
         //here there are two independant variables which are the coordinates of the matrix so for x variables k = 2
         //Let us declare an 2D array of 2 columns
         //If start col and start row is 0,0 and end col and end row is 3,3 we will get a 2D array like this with 16 pairs
@@ -87,26 +90,37 @@ public class FQ {
         int endRow = subMatrixCoordinates.getEndRow();
         int startColumn = subMatrixCoordinates.getStartColumn();
         int endColumn = subMatrixCoordinates.getEndColumn();
-        int width = endColumn - startColumn +1;
-        int height = endRow - startRow +1;
-        int totalObservations = width*height;
-        System.out.println("totalObservations "+totalObservations);
+        int width = endColumn - startColumn + 1;
+        int height = endRow - startRow + 1;
+        int totalObservations = width * height;
+        //System.out.println("totalObservations "+totalObservations);
         double x[][] = new double[totalObservations][2];
-        
-        
-    }
+        double y[] = new double[totalObservations];
+        int observationNumber = 0;
+        for (int row = startRow; row <= endRow; row++) {
+            for (int col = startColumn; col <= endColumn; col++) {
+                x[observationNumber][0] = row;
+                x[observationNumber][1] = col;
+                y[observationNumber] = inputMatrix.getEntry(row, col);
+                //System.out.println("y "+y[observationNumber]+" "+ArrayUtils.toString(x[observationNumber]));
+            }
+        }
+        OLSMultipleLinearRegression multipleLinearRegression = new OLSMultipleLinearRegression();
+        multipleLinearRegression.newSampleData(y, x);
+        multipleLinearRegression.setNoIntercept(false);
 
-    private ScaleMappedFD prepareMultiRegressionForAMatrix(RealMatrix m) {
-        Double xCoeff;
-        Double yCoeff;
-        Double intercept;
-        Double rSquare;
-        xCoeff = 1.0;
-        yCoeff = 2.0;
-        intercept = 3.0;
-        rSquare = 5.0;
-        ScaleMappedFD scaleMappedFD = new ScaleMappedFD(null, xCoeff, yCoeff, intercept, rSquare);
-        return scaleMappedFD;
+        Double rSquared = 0.0;
+        
+        try {
+            double[] regressionParameters = multipleLinearRegression.estimateRegressionParameters();
+            
+            rSquared = multipleLinearRegression.calculateRSquared();
+            System.out.println(ArrayUtils.toString(regressionParameters)+ " rSquared "+rSquared);
+        } catch (SingularMatrixException se) {
+            rSquared = 1.0;
+            System.out.println( " rSquared except "+rSquared);
+        }
+        return rSquared;
     }
 
     public void getFD() {
