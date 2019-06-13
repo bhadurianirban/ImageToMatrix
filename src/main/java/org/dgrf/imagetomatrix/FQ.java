@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.SingularMatrixException;
 import org.apache.commons.math3.stat.regression.MultipleLinearRegression;
@@ -103,6 +104,7 @@ public class FQ {
                 x[observationNumber][1] = col;
                 y[observationNumber] = inputMatrix.getEntry(row, col);
                 //System.out.println("y "+y[observationNumber]+" "+ArrayUtils.toString(x[observationNumber]));
+                observationNumber++;
             }
         }
         OLSMultipleLinearRegression multipleLinearRegression = new OLSMultipleLinearRegression();
@@ -110,12 +112,20 @@ public class FQ {
         multipleLinearRegression.setNoIntercept(false);
 
         Double rSquared = 0.0;
-        
+        //System.out.println(ArrayUtils.toString(y));
+        //TestUtils.printMatrix(new Array2DRowRealMatrix(x));
+        //System.out.println("Gheu");
         try {
             double[] regressionParameters = multipleLinearRegression.estimateRegressionParameters();
-            
             rSquared = multipleLinearRegression.calculateRSquared();
-            System.out.println(ArrayUtils.toString(regressionParameters)+ " rSquared "+rSquared);
+            if (rSquared.equals(Double.NaN)) {
+                System.out.println("SSTO "+multipleLinearRegression.calculateTotalSumOfSquares());
+                System.out.println("SSO "+multipleLinearRegression.calculateResidualSumOfSquares());
+                //System.out.println(ArrayUtils.toString(regressionParameters)+ " rSquared "+rSquared);
+                System.out.println(ArrayUtils.toString(y));
+                //TestUtils.printMatrix(new Array2DRowRealMatrix(x));
+            }
+            
         } catch (SingularMatrixException se) {
             rSquared = 1.0;
             System.out.println( " rSquared except "+rSquared);
