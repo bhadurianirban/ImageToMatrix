@@ -85,7 +85,7 @@ public class RandomWalkMatix {
         return randomWalkMatrix;
     }
     private void prepareMeanSubtractedMatrix() {
-        
+        prepareMatrixMean();
         meanSubtractedMatrix = origMatrix.scalarAdd(0-matrixMean);
     }
 

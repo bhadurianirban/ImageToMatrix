@@ -21,14 +21,14 @@ import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
  */
 public class FQ {
 
-    private RealMatrix inputMatrix;
-    private Double columnScaleMax;
-    private Double rowScaleMax;
-    private Double columnScaleMin;
-    private Double rowScaleMin;
+    private final RealMatrix inputMatrix;
+    private final Double columnScaleMax;
+    private final Double rowScaleMax;
+    private final Double columnScaleMin;
+    private final Double rowScaleMin;
     private List<MatrixScale> matrixScales;
 
-    private int numberOfScales;
+    private final int numberOfScales;
 
     public FQ(RealMatrix inputMatrix) {
         this.inputMatrix = inputMatrix;
@@ -111,12 +111,12 @@ public class FQ {
         multipleLinearRegression.newSampleData(y, x);
         multipleLinearRegression.setNoIntercept(false);
 
-        Double rSquared = 0.0;
+        Double rSquared;
         //System.out.println(ArrayUtils.toString(y));
         //TestUtils.printMatrix(new Array2DRowRealMatrix(x));
         //System.out.println("Gheu");
         try {
-            double[] regressionParameters = multipleLinearRegression.estimateRegressionParameters();
+            //double[] regressionParameters = multipleLinearRegression.estimateRegressionParameters();
             rSquared = multipleLinearRegression.calculateRSquared();
             if (rSquared.equals(Double.NaN)) {
                 System.out.println("SSTO "+multipleLinearRegression.calculateTotalSumOfSquares());
