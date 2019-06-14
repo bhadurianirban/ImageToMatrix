@@ -111,26 +111,32 @@ public class FQ {
         multipleLinearRegression.newSampleData(y, x);
         multipleLinearRegression.setNoIntercept(false);
 
-        Double rSquared;
+        Double residualSquaredSum;
+        double[] residuals;
         //System.out.println(ArrayUtils.toString(y));
         //TestUtils.printMatrix(new Array2DRowRealMatrix(x));
         //System.out.println("Gheu");
         try {
             //double[] regressionParameters = multipleLinearRegression.estimateRegressionParameters();
-            rSquared = multipleLinearRegression.calculateRSquared();
-            if (rSquared.equals(Double.NaN)) {
-                System.out.println("SSTO "+multipleLinearRegression.calculateTotalSumOfSquares());
-                System.out.println("SSO "+multipleLinearRegression.calculateResidualSumOfSquares());
+            residualSquaredSum = multipleLinearRegression.calculateResidualSumOfSquares();
+            //residuals = multipleLinearRegression.estimateResiduals();
+            //if (residualSquaredSum.equals(Double.NaN)) {
+                //System.out.println("SSTO "+multipleLinearRegression.calculateTotalSumOfSquares());
+                //System.out.println("SSO "+multipleLinearRegression.calculateResidualSumOfSquares());
                 //System.out.println(ArrayUtils.toString(regressionParameters)+ " rSquared "+rSquared);
-                System.out.println(ArrayUtils.toString(y));
+                //System.out.println(ArrayUtils.toString(y));
                 //TestUtils.printMatrix(new Array2DRowRealMatrix(x));
-            }
+            //}
             
         } catch (SingularMatrixException se) {
-            rSquared = 1.0;
-            System.out.println( " rSquared except "+rSquared);
+            residualSquaredSum = 0.0;
+            residuals = null;
+            System.out.println( " rSquared except "+residualSquaredSum);
         }
-        return rSquared;
+        //System.out.println(ArrayUtils.toString(residuals));
+        double meanResidualSquaredSum = residualSquaredSum/totalObservations;
+        System.out.println(meanResidualSquaredSum);
+        return meanResidualSquaredSum;
     }
 
     public void getFD() {

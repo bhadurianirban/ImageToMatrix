@@ -17,10 +17,11 @@ import org.apache.commons.math3.linear.RealMatrix;
  */
 public class RandomWalkMatix {
 
-    private final RealMatrix origMatrix;
+    private RealMatrix origMatrix;
     private RealMatrix randomWalkMatrix;
     private RealMatrix meanSubtractedMatrix;
     private Double matrixMean;
+    private Double matrixMaxValue;
 
     public RandomWalkMatix(RealMatrix origMatrix) {
         this.origMatrix = origMatrix;
@@ -40,6 +41,7 @@ public class RandomWalkMatix {
                 .flatMapToDouble(Arrays::stream)
                 .toArray();
         matrixMean = Arrays.stream(flatArray).average().getAsDouble();
+        
         //System.out.println(s);
     }
 
@@ -50,56 +52,87 @@ public class RandomWalkMatix {
         randomWalkMatrix = new Array2DRowRealMatrix(rowCount, columnCount);
         for (int row = 0; row < rowCount; row++) {
             for (int col = 0; col < columnCount; col++) {
-                if (row == 0 && col==0) {
+                if (row == 0 && col == 0) {
                     //randomWalkMatrixD[row][col] = origMatrix.getEntry(row, col);
                     double cumValue = meanSubtractedMatrix.getEntry(row, col);
                     randomWalkMatrix.setEntry(row, col, cumValue);
-                } else if (row == 0 && col!=0) {
+                } else if (row == 0 && col != 0) {
                     double cumValue = randomWalkMatrix.getEntry(0, col - 1) + meanSubtractedMatrix.getEntry(row, col);
                     randomWalkMatrix.setEntry(row, col, cumValue);
-                } else if (col == 0 && row!=0) {
-                    double cumValue = randomWalkMatrix.getEntry(row -1, 0) + meanSubtractedMatrix.getEntry(row, col);
+                } else if (col == 0 && row != 0) {
+                    double cumValue = randomWalkMatrix.getEntry(row - 1, 0) + meanSubtractedMatrix.getEntry(row, col);
                     randomWalkMatrix.setEntry(row, col, cumValue);
                 } else {
-                    double cumValue =  randomWalkMatrix.getEntry(row , col - 1)
-                                     + randomWalkMatrix.getEntry(row-1 , col)
-                                     + meanSubtractedMatrix.getEntry(row, col);
+                    double cumValue = randomWalkMatrix.getEntry(row, col - 1)
+                            + randomWalkMatrix.getEntry(row - 1, col)
+                            + meanSubtractedMatrix.getEntry(row, col);
                     randomWalkMatrix.setEntry(row, col, cumValue);
                 }
 
             }
 
         }
-        
+
     }
 
-    public Double getMatrixMean() {
+    private void prepareMeanSubtractedMatrix() {
+        meanSubtractedMatrix = origMatrix.scalarAdd(0 - matrixMean);
+    }
+
+    private void prepareNormalisedMatrix() {
+        double mat[][] = origMatrix.getData();
+
+        double flatArray[] = Arrays.stream(mat)
+                .flatMapToDouble(Arrays::stream)
+                .toArray();
+        
+        matrixMaxValue = Arrays.stream(flatArray).max().getAsDouble();
+        origMatrix = origMatrix.scalarMultiply(1 / matrixMaxValue);
+    }
+
+    public Double getMatrixMean(Boolean normalised) {
+        if (normalised) {
+            prepareNormalisedMatrix();
+        }
         prepareMatrixMean();
         return matrixMean;
     }
+    public RealMatrix getNormalisedMatrix() {
+        
+        prepareNormalisedMatrix();
+        return this.origMatrix;
+    }
+    public RealMatrix getMeanSubtractedMatrix(Boolean normalised) {
+        
+        if (normalised) {
+            prepareNormalisedMatrix();
+        }
+        prepareMatrixMean();
+        prepareMeanSubtractedMatrix();
+        return meanSubtractedMatrix;
+    }
 
-    public RealMatrix getCumulativeMatrix() {
+    public RealMatrix getCumulativeMatrix(Boolean normalised) {
+
+        
+        if (normalised) {
+            prepareNormalisedMatrix();
+        }
         prepareMatrixMean();
         prepareMeanSubtractedMatrix();
         cumulateMatrix();
         return randomWalkMatrix;
     }
-    private void prepareMeanSubtractedMatrix() {
-        prepareMatrixMean();
-        meanSubtractedMatrix = origMatrix.scalarAdd(0-matrixMean);
-    }
 
-    public RealMatrix getMeanSubtractedMatrix() {
-        prepareMeanSubtractedMatrix();
-        return meanSubtractedMatrix;
-    }
-    
-    public FQ FQ() {
+    public FQ FQ(Boolean normalised) {
+        
+        if (normalised) {
+            prepareNormalisedMatrix();
+        }
         prepareMatrixMean();
         prepareMeanSubtractedMatrix();
         cumulateMatrix();
         return new FQ(randomWalkMatrix);
     }
-    
 
 }
