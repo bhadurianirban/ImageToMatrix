@@ -23,16 +23,19 @@ public class Driver {
 
         //Double d = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
         //Double mean = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMatrixMean();
-        new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).FQ(Boolean.TRUE).getFD();
+        //new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).FQ(Boolean.TRUE).getFD();
         double[][] a = {
             {1, 2, 3, 6},
             {4, 5, 6, 9},
             {7, 2, 1, 2},};
-        //double mean = new RandomWalkMatix(a).getMatrixMean();
-        //System.out.println(mean);
-        //RealMatrix d = new RandomWalkMatix(a).getCumulativeMatrix();
+        double mean = new RandomWalkMatix(a).getMatrixMean(Boolean.FALSE);
+        System.out.println(mean);
+        RealMatrix d = new RandomWalkMatix(a).getMeanSubtractedMatrix(Boolean.FALSE);
+        TestUtils.printMatrix(d);
+        System.out.println("===");
+        RealMatrix e = new RandomWalkMatix(a).getCumulativeMatrix(Boolean.FALSE);
         //RealMatrix d = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getCumulativeMatrix(Boolean.TRUE);
-        //TestUtils.printMatrix(d);
+        TestUtils.printMatrix(e);
 
 
     }
