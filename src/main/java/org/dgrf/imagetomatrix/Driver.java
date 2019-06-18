@@ -1,10 +1,5 @@
 package org.dgrf.imagetomatrix;
 
-import java.util.List;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -17,7 +12,8 @@ import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
 public class Driver {
 
     public static void main(String args[]) {
-        String imageFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+        String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+        String tagoreImageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/Tagore.jpg";
         //String outFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/radhaGreen.csv";
         //new ReadImage(imageFilePath).writeMatrixToFile(outFilePath,COLORCCHOICE.GREEN);
 
@@ -29,11 +25,9 @@ public class Driver {
 //        RealMatrix c = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).getCumulativeMatrix(Boolean.FALSE);
 //        TestUtils.printMatrix(c);
         //Double mean = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMatrixMean();
-        new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).FQMeanSubtrated(Boolean.TRUE).getFD();
+        System.out.println(new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).FQMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope());
+        System.out.println(new ReadImage(tagoreImageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).FQMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope());
         
-        
-
-
     }
 
     

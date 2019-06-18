@@ -18,6 +18,10 @@ public class MatrixScale {
         this.rowScaleSize = rowScaleSize;
     }
     
+    public double getArea() {
+        double area = Double.valueOf(columnScaleSize*rowScaleSize);
+        return area;
+    }
     public int getColumnScaleSize() {
         return columnScaleSize;
     }
