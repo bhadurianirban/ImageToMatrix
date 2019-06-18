@@ -21,6 +21,19 @@ public class TestUtils {
             System.out.println(ArrayUtils.toString(rowV));
         }
     }
+    public static void TestWithSMallMatrix() {
+    double[][] a = {
+            {1, 2, 3, 6},
+            {4, 5, 6, 9},
+            {7, 2, 1, 2},};
+        double mean = new RandomWalkMatix(a).getMatrixMean(Boolean.FALSE);
+        System.out.println(mean);
+        RealMatrix d = new RandomWalkMatix(a).getMeanSubtractedMatrix(Boolean.FALSE);
+        TestUtils.printMatrix(d);
+        System.out.println("===");
+        RealMatrix e = new RandomWalkMatix(a).getCumulativeMatrix(Boolean.FALSE);
+        TestUtils.printMatrix(e);
+    }
     public static void testMultiRegression() {
         OLSMultipleLinearRegression regression = new OLSMultipleLinearRegression();
 // weight

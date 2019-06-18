@@ -12,6 +12,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.SingularMatrixException;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.regression.MultipleLinearRegression;
 import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
 
@@ -67,15 +68,16 @@ public class FQ {
 
         //for (MatrixScale matrixScale : matrixScales) {
         //for test begin
-        MatrixScale matrixScale = matrixScales.get(0);
+        MatrixScale matrixScale = matrixScales.get(1);
         //for test end
         List<SubMatrixCoordinates> subMatrixCoordinatesList = prepareSubMatrixCoordinatesForAScale(matrixScale);
 
-        List<Double> rSqueredList = subMatrixCoordinatesList.stream().map(m -> prepareVariableAndObservations(m)).collect(Collectors.toList());
-        //rSqueredList.forEach(m -> System.out.println(m));
+        List<Double> meanResidualSquaredSumList = subMatrixCoordinatesList.stream().map(m -> prepareMeanResidualSquareListForAScale(m)).collect(Collectors.toList());
+        meanResidualSquaredSumList.forEach(m -> System.out.println(m));
+        System.out.println("----"+getRMSValue(meanResidualSquaredSumList));
     }
 
-    private Double prepareVariableAndObservations(SubMatrixCoordinates subMatrixCoordinates) {
+    private double prepareMeanResidualSquareListForAScale(SubMatrixCoordinates subMatrixCoordinates) {
         //here there are two independant variables which are the coordinates of the matrix so for x variables k = 2
         //Let us declare an 2D array of 2 columns
         //If start col and start row is 0,0 and end col and end row is 3,3 we will get a 2D array like this with 16 pairs
@@ -112,33 +114,21 @@ public class FQ {
         multipleLinearRegression.setNoIntercept(false);
 
         Double residualSquaredSum;
-        double[] residuals;
-        //System.out.println(ArrayUtils.toString(y));
-        //TestUtils.printMatrix(new Array2DRowRealMatrix(x));
-        //System.out.println("Gheu");
-        try {
-            //double[] regressionParameters = multipleLinearRegression.estimateRegressionParameters();
-            residualSquaredSum = multipleLinearRegression.calculateResidualSumOfSquares();
-            //residuals = multipleLinearRegression.estimateResiduals();
-            //if (residualSquaredSum.equals(Double.NaN)) {
-                //System.out.println("SSTO "+multipleLinearRegression.calculateTotalSumOfSquares());
-                //System.out.println("SSO "+multipleLinearRegression.calculateResidualSumOfSquares());
-                //System.out.println(ArrayUtils.toString(regressionParameters)+ " rSquared "+rSquared);
-                //System.out.println(ArrayUtils.toString(y));
-                //TestUtils.printMatrix(new Array2DRowRealMatrix(x));
-            //}
-            
-        } catch (SingularMatrixException se) {
-            residualSquaredSum = 0.0;
-            residuals = null;
-            System.out.println( " rSquared except "+residualSquaredSum);
-        }
+
+        residualSquaredSum = multipleLinearRegression.calculateResidualSumOfSquares();
+
         //System.out.println(ArrayUtils.toString(residuals));
-        double meanResidualSquaredSum = residualSquaredSum/totalObservations;
-        System.out.println(meanResidualSquaredSum);
+        double meanResidualSquaredSum = residualSquaredSum / totalObservations;
+        //System.out.println(meanResidualSquaredSum);
         return meanResidualSquaredSum;
     }
-
+    
+    private double getRMSValue(List<Double> meanResidualSquaredSumList) {
+        double[] meanResidualSquaredSums = meanResidualSquaredSumList.stream().mapToDouble(Double::doubleValue).toArray();
+        DescriptiveStatistics ds = new DescriptiveStatistics(meanResidualSquaredSums);
+        double rms = ds.getQuadraticMean();
+        return rms;
+    }
     public void getFD() {
         prepareMatrixScales();
         prepareFD();

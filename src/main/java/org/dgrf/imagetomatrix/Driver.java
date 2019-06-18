@@ -21,21 +21,17 @@ public class Driver {
         //String outFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/radhaGreen.csv";
         //new ReadImage(imageFilePath).writeMatrixToFile(outFilePath,COLORCCHOICE.GREEN);
 
-        //Double d = new ReadImage(imageFilePath).getRandomWalkMatix().getMatrixMean();
+//        Double mean = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).getMatrixMean(Boolean.FALSE);
+//        System.out.println(mean);
+//        RealMatrix d = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).getMeanSubtractedMatrix(Boolean.FALSE);
+//        TestUtils.printMatrix(d);
+//        System.out.println("+++++++++++++++++++++++++++++++");
+//        RealMatrix c = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).getCumulativeMatrix(Boolean.FALSE);
+//        TestUtils.printMatrix(c);
         //Double mean = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getMatrixMean();
-        //new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).FQ(Boolean.TRUE).getFD();
-        double[][] a = {
-            {1, 2, 3, 6},
-            {4, 5, 6, 9},
-            {7, 2, 1, 2},};
-        double mean = new RandomWalkMatix(a).getMatrixMean(Boolean.FALSE);
-        System.out.println(mean);
-        RealMatrix d = new RandomWalkMatix(a).getMeanSubtractedMatrix(Boolean.FALSE);
-        TestUtils.printMatrix(d);
-        System.out.println("===");
-        RealMatrix e = new RandomWalkMatix(a).getCumulativeMatrix(Boolean.FALSE);
-        //RealMatrix d = new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.RED).getCumulativeMatrix(Boolean.TRUE);
-        TestUtils.printMatrix(e);
+        new ReadImage(imageFilePath).randomWalkMatix(COLORCCHOICE.BLUE).FQMeanSubtrated(Boolean.TRUE).getFD();
+        
+        
 
 
     }

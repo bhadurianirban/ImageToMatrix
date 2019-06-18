@@ -124,7 +124,7 @@ public class RandomWalkMatix {
         return randomWalkMatrix;
     }
 
-    public FQ FQ(Boolean normalised) {
+    public FQ FQCumulative(Boolean normalised) {
         
         if (normalised) {
             prepareNormalisedMatrix();
@@ -134,5 +134,14 @@ public class RandomWalkMatix {
         cumulateMatrix();
         return new FQ(randomWalkMatrix);
     }
-
+    public FQ FQMeanSubtrated(Boolean normalised) {
+        
+        if (normalised) {
+            prepareNormalisedMatrix();
+        }
+        prepareMatrixMean();
+        prepareMeanSubtractedMatrix();
+        //cumulateMatrix();
+        return new FQ(meanSubtractedMatrix);
+    }
 }
