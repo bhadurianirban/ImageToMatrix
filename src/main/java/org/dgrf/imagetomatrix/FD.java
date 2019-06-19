@@ -17,7 +17,7 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
  *
  * @author dgrfi
  */
-public class FQ {
+public class FD {
 
     private final RealMatrix inputMatrix;
     private final Double columnScaleMax;
@@ -30,7 +30,7 @@ public class FQ {
     private final int numberOfScales;
     private SimpleRegression scaleRMSLogFit;
 
-    public FQ(RealMatrix inputMatrix) {
+    public FD(RealMatrix inputMatrix) {
         this.inputMatrix = inputMatrix;
         this.columnScaleMax = Double.valueOf(inputMatrix.getColumnDimension());
         this.rowScaleMax = Double.valueOf(inputMatrix.getRowDimension());
@@ -38,7 +38,7 @@ public class FQ {
         numberOfScales = 19;
     }
 
-    public FQ(RealMatrix inputMatrix, int numberOfScales) {
+    public FD(RealMatrix inputMatrix, int numberOfScales) {
         this.inputMatrix = inputMatrix;
         this.columnScaleMax = Double.valueOf(inputMatrix.getColumnDimension());
         this.rowScaleMax = Double.valueOf(inputMatrix.getRowDimension());
@@ -79,25 +79,25 @@ public class FQ {
         //for test end
         scaleMappedRMSList = matrixScales.stream().map(ms -> prepareScaleMappedRMS(ms)).collect(Collectors.toList());
 
-        //double meanResidualSquaredSumRMS = prepareMeanResidualSquareListForAScale(matrixScale);
+        //double meanResidualSquaredSumRMS = prepareMeanResidualSquareForAScale(matrixScale);
         //System.out.println("----"+meanResidualSquaredSumRMS);
     }
 
     private ScaleMappedRMS prepareScaleMappedRMS(MatrixScale matrixScale) {
-        double meanResidualSquaredSumRMS = prepareMeanResidualSquareListForAScale(matrixScale);
+        double meanResidualSquaredSumRMS = prepareMeanResidualSquareForAScale(matrixScale);
         ScaleMappedRMS scaleMappedRMS = new ScaleMappedRMS(matrixScale, meanResidualSquaredSumRMS);
         return scaleMappedRMS;
     }
 
-    private double prepareMeanResidualSquareListForAScale(MatrixScale matrixScale) {
+    private double prepareMeanResidualSquareForAScale(MatrixScale matrixScale) {
         List<SubMatrixCoordinates> subMatrixCoordinatesList = prepareSubMatrixCoordinatesForAScale(matrixScale);
 
-        List<Double> meanResidualSquaredSumList = subMatrixCoordinatesList.stream().map(m -> prepareMeanResidualSquareListForASubmatrix(m)).collect(Collectors.toList());
+        List<Double> meanResidualSquaredSumList = subMatrixCoordinatesList.stream().map(m -> prepareMeanResidualSquareForASubmatrix(m)).collect(Collectors.toList());
         double meanResidualSquaredSumRMS = getRMSValue(meanResidualSquaredSumList);
         return meanResidualSquaredSumRMS;
     }
 
-    private double prepareMeanResidualSquareListForASubmatrix(SubMatrixCoordinates subMatrixCoordinates) {
+    private double prepareMeanResidualSquareForASubmatrix(SubMatrixCoordinates subMatrixCoordinates) {
         //here there are two independant variables which are the coordinates of the matrix so for x variables k = 2
         //Let us declare an 2D array of 2 columns
         //If start col and start row is 0,0 and end col and end row is 3,3 we will get a 2D array like this with 16 pairs

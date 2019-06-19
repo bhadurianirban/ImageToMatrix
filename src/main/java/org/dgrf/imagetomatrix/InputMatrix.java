@@ -15,7 +15,7 @@ import org.apache.commons.math3.linear.RealMatrix;
  *
  * @author bhaduri
  */
-public class RandomWalkMatix {
+public class InputMatrix {
 
     private RealMatrix origMatrix;
     private RealMatrix randomWalkMatrix;
@@ -23,12 +23,12 @@ public class RandomWalkMatix {
     private Double matrixMean;
     private Double matrixMaxValue;
 
-    public RandomWalkMatix(RealMatrix origMatrix) {
+    public InputMatrix(RealMatrix origMatrix) {
         this.origMatrix = origMatrix;
 
     }
 
-    public RandomWalkMatix(double[][] origMatrix) {
+    public InputMatrix(double[][] origMatrix) {
         this.origMatrix = new Array2DRowRealMatrix(origMatrix);
 
     }
@@ -124,7 +124,7 @@ public class RandomWalkMatix {
         return randomWalkMatrix;
     }
 
-    public FQ FQCumulative(Boolean normalised) {
+    public FD getCumulative(Boolean normalised) {
         
         if (normalised) {
             prepareNormalisedMatrix();
@@ -132,9 +132,9 @@ public class RandomWalkMatix {
         prepareMatrixMean();
         prepareMeanSubtractedMatrix();
         cumulateMatrix();
-        return new FQ(randomWalkMatrix);
+        return new FD(randomWalkMatrix);
     }
-    public FQ FQMeanSubtrated(Boolean normalised,int numberOfScales) {
+    public FD getMeanSubtrated(Boolean normalised,int numberOfScales) {
         
         if (normalised) {
             prepareNormalisedMatrix();
@@ -142,9 +142,9 @@ public class RandomWalkMatix {
         prepareMatrixMean();
         prepareMeanSubtractedMatrix();
         //cumulateMatrix();
-        return new FQ(meanSubtractedMatrix);
+        return new FD(meanSubtractedMatrix);
     }
-    public FQ FQMeanSubtrated(Boolean normalised) {
+    public FD getMeanSubtrated(Boolean normalised) {
         
         if (normalised) {
             prepareNormalisedMatrix();
@@ -152,6 +152,6 @@ public class RandomWalkMatix {
         prepareMatrixMean();
         prepareMeanSubtractedMatrix();
         //cumulateMatrix();
-        return new FQ(meanSubtractedMatrix);
+        return new FD(meanSubtractedMatrix);
     }
 }

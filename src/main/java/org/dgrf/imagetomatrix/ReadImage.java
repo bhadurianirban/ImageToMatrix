@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
 
@@ -30,7 +29,7 @@ public class ReadImage {
     private final String imageFilePath;
     private BufferedImage image;
     private RealMatrix colorMatrix;
-    private RandomWalkMatix randomWalkMatix;
+    private InputMatrix randomWalkMatix;
 
     public ReadImage(String imageFilePath) {
         this.imageFilePath = imageFilePath;
@@ -42,18 +41,9 @@ public class ReadImage {
             // the line that reads the image file
             image = ImageIO.read(new File(imageFilePath));
             prepareClourMatrix(color);
-            //printColorMatrix();
-//            for (int i = 0; i < h; i++) {
-//                for (int j = 0; j < w; j++) {
-//                    System.out.println("x,y: " + j + ", " + i);
-//                    int pixel = image.getRGB(j, i);
-//                    printPixelARGB(pixel);
-//                    System.out.println("");
-//                }
-//            }
+
         } catch (IOException e) {
-            // log the exception
-            // re-throw if desired
+            Logger.getLogger(ReadImage.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -101,11 +91,15 @@ public class ReadImage {
         }
 
     }
-
-    
-    public RandomWalkMatix randomWalkMatix(COLORCCHOICE colorcchoice) {
+    public RealMatrix getImageMatrix(COLORCCHOICE colorcchoice) {
         readImage(colorcchoice);
-        randomWalkMatix = new RandomWalkMatix(colorMatrix);
+        
+        return colorMatrix;
+    }
+    
+    public InputMatrix getInputMatrix(COLORCCHOICE colorcchoice) {
+        readImage(colorcchoice);
+        randomWalkMatix = new InputMatrix(colorMatrix);
         return randomWalkMatix;
     }
 

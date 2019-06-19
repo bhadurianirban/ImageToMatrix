@@ -5,6 +5,7 @@
  */
 package org.dgrf.imagetomatrix;
 
+import java.io.File;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
@@ -26,12 +27,12 @@ public class TestUtils {
             {1, 2, 3, 6},
             {4, 5, 6, 9},
             {7, 2, 1, 2},};
-        double mean = new RandomWalkMatix(a).getMatrixMean(Boolean.FALSE);
+        double mean = new InputMatrix(a).getMatrixMean(Boolean.FALSE);
         System.out.println(mean);
-        RealMatrix d = new RandomWalkMatix(a).getMeanSubtractedMatrix(Boolean.FALSE);
+        RealMatrix d = new InputMatrix(a).getMeanSubtractedMatrix(Boolean.FALSE);
         TestUtils.printMatrix(d);
         System.out.println("===");
-        RealMatrix e = new RandomWalkMatix(a).getCumulativeMatrix(Boolean.FALSE);
+        RealMatrix e = new InputMatrix(a).getCumulativeMatrix(Boolean.FALSE);
         TestUtils.printMatrix(e);
     }
     public static void testMultiRegression() {
@@ -57,5 +58,21 @@ public class TestUtils {
         //    System.out.println(p);
        // }
         System.out.println(regression.calculateRSquared());
+    }
+    public static void calculateForFolder(String folderPath) {
+        File folder = new File(folderPath);
+        if (!folder.isDirectory()) {
+            System.out.println("not a folder path");
+        } else {
+            File fileList[] = folder.listFiles();
+            for (File file:fileList) {
+                String imageFilePath = file.getAbsolutePath();
+                String imageFileName = file.getName();
+                double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+                double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+                double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+                System.out.println(imageFileName+","+hurstRed+","+hurstGreen+","+hurstBlue);
+            }
+        }
     }
 }
