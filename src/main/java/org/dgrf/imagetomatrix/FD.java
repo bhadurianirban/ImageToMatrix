@@ -58,8 +58,8 @@ public class FD {
 
         matrixScales = new ArrayList<>();
         for (int expCounter = 0; expCounter < numberOfScales; expCounter++) {
-            int columnScaleSize = (int) Math.round(Math.pow(2, colomnExpLinSpace.getLinSpaceElement(expCounter)));
-            int rowScaleSize = (int) Math.round(Math.pow(2, rowExpLinSpace.getLinSpaceElement(expCounter)));
+            int columnScaleSize = (int) Math.round(Math.pow(2, colomnExpLinSpace.getLinSpaceList().get(expCounter)));
+            int rowScaleSize = (int) Math.round(Math.pow(2, rowExpLinSpace.getLinSpaceList().get(expCounter)));
             MatrixScale matrixScale = new MatrixScale(columnScaleSize, rowScaleSize);
             matrixScales.add(matrixScale);
             //System.out.println(columnScaleSize+" "+rowScaleSize);

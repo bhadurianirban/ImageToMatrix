@@ -75,4 +75,21 @@ public class TestUtils {
             }
         }
     }
+    public static void testLinSpace() {
+        Double columnExponentMin = LogUtil.logBaseK(16);
+        Double columnExponentMax = LogUtil.logBaseK(320);
+        LinSpace1 colomnExpLinSpace = new LinSpace1(columnExponentMin, columnExponentMax, 19);
+//        for (int i=0;i<19;i++) {
+//            
+//            int columnScaleSize = (int) Math.round(Math.pow(2, colomnExpLinSpace.getLinSpaceElement(i)));
+//            System.out.println(colomnExpLinSpace.getLinSpaceElement(i)+","+columnScaleSize);
+//        }
+        
+        LinSpace colomnExpLinSpace1 = new LinSpace(columnExponentMin, columnExponentMax, 19);
+        for (int i=0;i<19;i++) {
+            
+            int columnScaleSize = (int) Math.round(Math.pow(2, colomnExpLinSpace1.getLinSpaceList().get(i)));
+            System.out.println(colomnExpLinSpace1.getLinSpaceList().get(i)+","+columnScaleSize);
+        }
+    }
 }

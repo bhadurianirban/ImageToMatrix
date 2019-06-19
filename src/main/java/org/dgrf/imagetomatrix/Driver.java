@@ -1,5 +1,6 @@
 package org.dgrf.imagetomatrix;
 
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 
 /*
@@ -14,9 +15,10 @@ import org.apache.commons.math3.linear.RealMatrix;
 public class Driver {
 
     public static void main(String args[]) {
-        String imageFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/grayRadha.jpg";
-        RealMatrix d = new ReadImage(imageFilePath).getImageMatrix(COLORCCHOICE.RED);
-        TestUtils.printMatrix(d);
+        String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+
+        //TestUtils.printMatrix(d);
+        
         //String tagoreImageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/Tagore.jpg";
         //String outFilePath = "/home/dgrfi/MEGA/DGRFFractal/testdata/DFA2D/radhaGreen.csv";
         //new ReadImage(imageFilePath).writeMatrixToFile(outFilePath,COLORCCHOICE.GREEN);
@@ -33,6 +35,8 @@ public class Driver {
         //System.out.println(new ReadImage(tagoreImageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope());
         //String imageFolderPath = "/home/dgrfi/Pictures/dance";
         //TestUtils.calculateForFolder(imageFolderPath);
+        
+        TestUtils.testLinSpace();
     }
 
     
