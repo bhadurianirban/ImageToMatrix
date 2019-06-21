@@ -16,10 +16,10 @@ public class Driver {
 
     public static void main(String args[]) {
         //String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
-        String imageFolderPath = "/home/bhaduri/MEGA/Paper/2DRaash/danceface";
-        String imageFilePath = "/home/bhaduri/MEGA/Paper/2DRaash/danceface/21-1.jpg";
+        String imageFolderPath = "/home/dgrfi/MEGA/Paper/2DRaash/dance";
+        String imageFilePath = "/home/dgrfi/MEGA/Paper/2DRaash/dancefacegray/21-1.jpg";
         
-        TestUtils.ScaleMapFD(imageFilePath);
+        TestUtils.DFAForFolder(imageFolderPath);
         
         
     }
