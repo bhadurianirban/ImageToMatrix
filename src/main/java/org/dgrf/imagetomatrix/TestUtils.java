@@ -130,9 +130,9 @@ public class TestUtils {
             for (File file : fileList) {
                 String imageFilePath = file.getAbsolutePath();
                 String imageFileName = file.getName();
-                double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getCumulative(Boolean.FALSE).getScaleRMSLogFit().getSlope();
-                double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getCumulative(Boolean.FALSE).getScaleRMSLogFit().getSlope();
-                double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getCumulative(Boolean.FALSE).getScaleRMSLogFit().getSlope();
+                double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getCumulative(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+                double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getCumulative(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+                double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getCumulative(Boolean.TRUE).getScaleRMSLogFit().getSlope();
                 System.out.println(imageFileName + "," + hurstRed + "," + hurstGreen + "," + hurstBlue);
             }
         }

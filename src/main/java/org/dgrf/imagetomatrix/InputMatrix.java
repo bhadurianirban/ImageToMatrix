@@ -47,53 +47,47 @@ public class InputMatrix {
     private void cumulateMatrix() {
         int columnCount = origMatrix.getColumnDimension();
         int rowCount = origMatrix.getRowDimension();
-        //get vector/array for each column means
-        double[] fullColumnMeanArray = new double[columnCount];
+        
         Array2DRowRealMatrix columnMeanSubtractedMatrix = new Array2DRowRealMatrix(rowCount, columnCount);
         for (int col =0;col<columnCount;col++) {
             double[] fullColumn = origMatrix.getColumn(col);
             double fullColumnMean = Arrays.stream(fullColumn).average().getAsDouble();
             double[] columnMeanSubtracted = Arrays.stream(fullColumn).map(i -> i - fullColumnMean).toArray();
+            for (int row=1;row<columnMeanSubtracted.length;row++) {
+                columnMeanSubtracted[row] = columnMeanSubtracted[row]+columnMeanSubtracted[row-1];
+            }
             columnMeanSubtractedMatrix.setColumn(col, columnMeanSubtracted);
-            fullColumnMeanArray[col] = fullColumnMean;
+            
         }
-        //get vector/array for each row means
-        double[] fullRowMeanArray = new double[rowCount];
+        
         Array2DRowRealMatrix rowMeanSubtractedMatrix = new Array2DRowRealMatrix(rowCount, columnCount);
         for (int row = 0; row < rowCount; row++) {
             double[] fullRow = origMatrix.getRow(row);
             double fullRowMean = Arrays.stream(fullRow).average().getAsDouble();
             double[] rowMeanSubtracted = Arrays.stream(fullRow).map(i -> i - fullRowMean).toArray();
-            rowMeanSubtractedMatrix.setRow(row, rowMeanSubtracted);
-            fullRowMeanArray[row] = fullRowMean;
-        }
-        randomWalkMatrix = new Array2DRowRealMatrix(rowCount, columnCount);
-        for (int row = 0; row < rowCount; row++) {
-            for (int col = 0; col < columnCount; col++) {
-                //double[] fullColumn = origMatrix.getColumn(col);
-                //double[] fullRow = origMatrix.getRow(row);
-                double fullRowMean = fullRowMeanArray[row];
-                double fullColumnMean = fullColumnMeanArray[col];
-                
-                double[] columnTillThisPositionMeanSubtracted = Arrays.copyOfRange(columnMeanSubtractedMatrix.getColumn(col), 0, row + 1);
-                double sumColumnValuesTillThisPosition = Arrays.stream(columnTillThisPositionMeanSubtracted).sum();
-
-                
-                double[] rowTillThisPositionMeanSubtracted = Arrays.copyOfRange(rowMeanSubtractedMatrix.getRow(row), 0, col + 1);
-                double sumRowValuesTillThisPosition = Arrays.stream(rowTillThisPositionMeanSubtracted).sum();
-                double cumValue = sumRowValuesTillThisPosition + sumColumnValuesTillThisPosition;
-//                if (row == 1 && col == 1) {
-//                    System.out.println("fullColumnMean " + fullColumnMean + "fullRowMean " + fullRowMean);
-//                    
-//                    System.out.println("rowTillThisPositionMeanSubtracted " + ArrayUtils.toString(rowTillThisPositionMeanSubtracted));
-//                    System.out.println("columnTillThisPositionMeanSubtracted " + ArrayUtils.toString(columnTillThisPositionMeanSubtracted));
-//                    System.out.println("sumColumnValuesTillThisPosition " + sumColumnValuesTillThisPosition + "sumRowValuesTillThisPosition" + sumRowValuesTillThisPosition);
-//                }
-                randomWalkMatrix.setEntry(row, col, cumValue);
-
+            for (int col=1;col<rowMeanSubtracted.length;col++) {
+                rowMeanSubtracted[col] = rowMeanSubtracted[col]+rowMeanSubtracted[col-1];
             }
-
+            rowMeanSubtractedMatrix.setRow(row, rowMeanSubtracted);
+            
         }
+        randomWalkMatrix = rowMeanSubtractedMatrix.add(columnMeanSubtractedMatrix);
+//        randomWalkMatrix = new Array2DRowRealMatrix(rowCount, columnCount);
+//        for (int row = 0; row < rowCount; row++) {
+//            for (int col = 0; col < columnCount; col++) {
+//               
+//                double sumColumnValuesTillThisPosition = columnMeanSubtractedMatrix.getEntry(row, col);
+//
+//                
+//               
+//                double sumRowValuesTillThisPosition = rowMeanSubtractedMatrix.getEntry(row, col);
+//                double cumValue = sumRowValuesTillThisPosition + sumColumnValuesTillThisPosition;
+////                if (row == 1 && col == 1) {
+////                    System.out.println("sumColumnValuesTillThisPosition " + sumColumnValuesTillThisPosition + "sumRowValuesTillThisPosition" + sumRowValuesTillThisPosition);
+////                }
+//                randomWalkMatrix.setEntry(row, col, cumValue);
+//            }
+//        }
 
     }
 
