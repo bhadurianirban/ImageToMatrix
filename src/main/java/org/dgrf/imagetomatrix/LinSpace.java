@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.math3.util.Precision;
 
 public class LinSpace {
 
@@ -28,7 +29,7 @@ public class LinSpace {
         linSpaceList.add(linSpace);
         for (int i = 1; i < numberOfScales; i++){
             linSpace = linSpace + distanceInBetween;
-            linSpaceList.add(linSpace);
+            linSpaceList.add(Precision.round(linSpace,1));
         }
         
     }

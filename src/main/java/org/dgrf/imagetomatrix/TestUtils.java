@@ -6,11 +6,13 @@
 package org.dgrf.imagetomatrix;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
+import org.apache.commons.math3.util.Precision;
 import static org.dgrf.imagetomatrix.TestUtils.ScaleMapFD;
 
 /**
@@ -97,16 +99,23 @@ public class TestUtils {
     }
 
     public static void testLinSpace() {
-        Double columnExponentMin = LogUtil.logBaseK(16);
-        Double columnExponentMax = LogUtil.logBaseK(320);
-       
-
-        LinSpace colomnExpLinSpace1 = new LinSpace(columnExponentMin, columnExponentMax, 19);
-        for (int i = 0; i < 19; i++) {
-
-            int columnScaleSize = (int) Math.round(Math.pow(2, colomnExpLinSpace1.getLinSpaceList().get(i)));
-            System.out.println(colomnExpLinSpace1.getLinSpaceList().get(i) + "," + columnScaleSize);
-        }
+//        Double columnExponentMin = LogUtil.logBaseK(16);
+//        Double columnExponentMax = LogUtil.logBaseK(320);
+//       
+//
+//        LinSpace colomnExpLinSpace1 = new LinSpace(columnExponentMin, columnExponentMax, 19);
+//        for (int i = 0; i < 19; i++) {
+//
+//            int columnScaleSize = (int) Math.round(Math.pow(2, colomnExpLinSpace1.getLinSpaceList().get(i)));
+//            System.out.println(colomnExpLinSpace1.getLinSpaceList().get(i) + "," + columnScaleSize);
+//        }
+        LinSpace linSpace = new LinSpace(-5.0, 5.0, 101);
+        List<Double> linSpaceList = linSpace.getLinSpaceList();
+        linSpaceList.stream().forEach(m-> {
+               
+                System.out.println(m);
+                
+        });
     }
     public static void printCumulativeMatrixForPictureFile(String imageFilePath) {
         RealMatrix cum = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getCumulativeMatrix(Boolean.TRUE);
