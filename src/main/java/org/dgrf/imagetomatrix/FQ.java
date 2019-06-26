@@ -91,7 +91,7 @@ public class FQ {
 
     private ScaleMappedQRMS prepareScaleMappedRMS(MatrixScale matrixScale) {
         List<Double> meanResidualSquaredSumQRMS = prepareMeanResidualQPowerForAScale(matrixScale);
-        ScaleMappedQRMS scaleMappedqRMS = new ScaleMappedQRMS(matrixScale, meanResidualSquaredSumRMS);
+        ScaleMappedQRMS scaleMappedqRMS = new ScaleMappedQRMS(matrixScale, meanResidualSquaredSumQRMS);
         return scaleMappedqRMS;
     }
 
@@ -99,8 +99,8 @@ public class FQ {
         List<SubMatrixCoordinates> subMatrixCoordinatesList = prepareSubMatrixCoordinatesForAScale(matrixScale);
 
         List<Double> meanResidualSquaredSumList = subMatrixCoordinatesList.stream().map(m -> prepareMeanResidualSquareForASubmatrix(m)).collect(Collectors.toList());
-        double meanResidualSquaredSumRMS = getQRMSValue(meanResidualSquaredSumList);
-        return meanResidualSquaredSumRMS;
+        List<Double> meanResidualSquaredSumQRMS = getQRMSValue(meanResidualSquaredSumList);
+        return meanResidualSquaredSumQRMS;
     }
 
     private double prepareMeanResidualSquareForASubmatrix(SubMatrixCoordinates subMatrixCoordinates) {
@@ -168,16 +168,16 @@ public class FQ {
         return scaleMappedQRMSList;
     }
 
-    private void prepareScaleRMSLogFit() {
+    private void prepareMFSpectrum() {
         scaleRMSLogFit = new SimpleRegression(true);
-        scaleMappedRMSList.stream().forEach(scm -> scaleRMSLogFit.addData(scm.getLogOfMatrixScale(), scm.getLogOfRMS()));
+        //scaleMappedRMSList.stream().forEach(scm -> scaleRMSLogFit.addData(scm.getLogOfMatrixScale(), scm.getLogOfRMS()));
 
     }
 
     public SimpleRegression getScaleRMSLogFit() {
         prepareMatrixScales();
         prepareFQ();
-        prepareScaleRMSLogFit();
+        prepareMFSpectrum();
         return scaleRMSLogFit;
 
     }
