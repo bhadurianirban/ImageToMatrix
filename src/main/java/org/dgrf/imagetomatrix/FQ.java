@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
@@ -78,15 +77,7 @@ public class FQ {
     }
 
     private void prepareFQ() {
-
-        //for (MatrixScale matrixScale : matrixScales) {
-        //for test begin
-        //MatrixScale matrixScale = matrixScales.get(1);
-        //for test end
         scaleMappedQRMSList = matrixScales.stream().map(ms -> prepareScaleMappedRMS(ms)).collect(Collectors.toList());
-
-        //double meanResidualSquaredSumRMS = prepareMeanResidualQPowerForAScale(matrixScale);
-        //System.out.println("----"+meanResidualSquaredSumRMS);
     }
 
     private ScaleMappedQRMS prepareScaleMappedRMS(MatrixScale matrixScale) {
@@ -150,15 +141,40 @@ public class FQ {
     }
 
     private List<Double> getQRMSValue(List<Double> meanResidualSquaredSumList) {
-        List<Double> FQ = qLinSpqceList.stream().map(q-> getQPoweredMean(meanResidualSquaredSumList)).collect(Collectors.toList());
+        List<Double> FQ = qLinSpqceList.stream().map(q -> getQPoweredMean(q, meanResidualSquaredSumList)).collect(Collectors.toList());
         return FQ;
     }
-    private Double getQPoweredMean(List<Double> meanResidualSquaredSumList) {
-        return 5.6;
+
+    private Double getQPoweredMean(Double q, List<Double> meanResidualSquaredSumList) {
+        Double qRMS;
+        List<Double> qPoweredRMS = meanResidualSquaredSumList.stream().map(mrss->calcqPower(mrss, q)).collect(Collectors.toList());
+        Double meanQPoweredRMS = qPoweredRMS.stream().mapToDouble(a -> a).average().getAsDouble();
+        if (q == 0) {
+            qRMS = Math.exp(0.5 * meanQPoweredRMS);
+        } else {
+            qRMS = Math.pow(meanQPoweredRMS, 1/q);
+        }
+
+        return qRMS;
     }
+
     private Double calcqPower(Double rms, Double q) {
-        Double qPower = Math.pow(rms, q);
-        return qPower;
+        if (q == 0) {
+            if (rms == 0) {
+                return 0.0;
+            } else {
+                Double qPower = Math.log(Math.pow(rms, 2));
+                return qPower;
+            }
+        } else {
+            if (rms == 0) {
+                return 0.0;
+            } else {
+                Double qPower = Math.pow(rms, q);
+                return qPower;
+            }
+        }
+
     }
 
     public List<ScaleMappedQRMS> getScaleMappedQRMSList() {
@@ -166,6 +182,11 @@ public class FQ {
         prepareQLinSpaceList();
         prepareFQ();
         return scaleMappedQRMSList;
+    }
+
+    public List<Double> getQLinSpaceList() {
+        prepareQLinSpaceList();
+        return qLinSpqceList;
     }
 
     private void prepareMFSpectrum() {

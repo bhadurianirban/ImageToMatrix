@@ -94,10 +94,14 @@ public class TestUtils {
     }
     
     public static void ScaleMapFD(String imageFilePath) {
-        List<ScaleMappedRMS> ScaleMappedRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getCumulative(Boolean.FALSE).getScaleMappedRMSList();
-        ScaleMappedRMSList.stream().forEach(scmr-> System.out.println(scmr.getLogOfMatrixScale()+","+scmr.getLogOfRMS()));
+        List<ScaleMappedRMS> ScaleMappedRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleMappedRMSList();
+        ScaleMappedRMSList.stream().forEach(scmr-> System.out.println(scmr.getMatrixScale().getArea()+","+scmr.getRMS()));
     }
-
+    public static void ScaleMapFQ(String imageFilePath) {
+        List<ScaleMappedQRMS> scaleMappedQRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getScaleMappedQRMSList();
+        scaleMappedQRMSList.stream().forEach(scmr-> System.out.println(scmr.getMatrixScale().getArea()+","+scmr.getqRMS().get(70)));
+    
+    }
     public static void testLinSpace() {
 //        Double columnExponentMin = LogUtil.logBaseK(16);
 //        Double columnExponentMax = LogUtil.logBaseK(320);
@@ -117,15 +121,20 @@ public class TestUtils {
                 
         });
     }
+    public static void testQLinSpace(String imageFilePath) {
+        List<Double> qLinSpaceList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getQLinSpaceList();
+        //qLinSpaceList.stream().forEach(System.out::println);
+        System.out.println(qLinSpaceList.get(70));
+    }
     public static void printCumulativeMatrixForPictureFile(String imageFilePath) {
         RealMatrix cum = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getCumulativeMatrix(Boolean.TRUE);
         printMatrix(cum);
     }
     public static void DFAForFile(String imageFilePath) {
         File imageFile = new File(imageFilePath);
-        double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getCumulative(Boolean.FALSE).getScaleRMSLogFit().getSlope();
-        double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getCumulative(Boolean.FALSE).getScaleRMSLogFit().getSlope();
-        double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getCumulative(Boolean.FALSE).getScaleRMSLogFit().getSlope();
+        double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
+        double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
+        double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
         System.out.println(imageFile.getName() + "," + hurstRed + "," + hurstGreen + "," + hurstBlue);
 
     }
@@ -139,9 +148,9 @@ public class TestUtils {
             for (File file : fileList) {
                 String imageFilePath = file.getAbsolutePath();
                 String imageFileName = file.getName();
-                double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getCumulative(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-                double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getCumulative(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-                double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getCumulative(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+                double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+                double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getFD(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+                double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getFD(Boolean.TRUE).getScaleRMSLogFit().getSlope();
                 System.out.println(imageFileName + "," + hurstRed + "," + hurstGreen + "," + hurstBlue);
             }
         }

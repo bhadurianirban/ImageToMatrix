@@ -16,7 +16,7 @@ public class ScaleMappedQRMS {
     
     private List<Double> qRMS;
     private double logOfMatrixScale;
-    private double logOfRMS;
+    
 
     public ScaleMappedQRMS(MatrixScale matrixScale, List<Double> qRMS) {
         this.matrixScale = matrixScale;
@@ -40,10 +40,11 @@ public class ScaleMappedQRMS {
         return logOfMatrixScale;
     }
 
-    public double getLogOfRMS() {
-        //logOfRMS = LogUtil.logBaseK(RMS);
-        return logOfRMS;
+    public List<Double> getqRMS() {
+        return qRMS;
     }
+
+   
     
 
     

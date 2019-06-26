@@ -227,11 +227,15 @@ public class InputMatrix {
         return randomWalkMatrix;
     }
 
-    public FD getCumulative(Boolean normalised) {
+    public FD getFD(Boolean normalised) {
 
         return new FD(getCumulativeMatrix(normalised));
     }
 
+    public FQ getFQ(Boolean normalised) {
+
+        return new FQ(getCumulativeMatrix(normalised));
+    }
     public FD getMeanSubtrated(Boolean normalised, int numberOfScales) {
 
         if (normalised) {
