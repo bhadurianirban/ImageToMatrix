@@ -15,9 +15,9 @@ import org.apache.commons.math3.linear.RealMatrix;
 public class Driver {
 
     public static void main(String args[]) {
-        String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
+        //String imageFilePath = "/home/bhaduri/MEGA/DGRFFractal/testdata/DFA2D/radha.jpg";
         String imageFolderPath = "/home/bhaduri/MEGA/Paper/2DRaash/dancegray";
-        //String imageFilePath = "/home/dgrfi/MEGA/Paper/2DRaash/dance/01.jpg";
+        String imageFilePath = "/home/dgrfi/MEGA/Paper/2DRaash/danceface/21-1.jpg";
         //TestUtils.testQLinSpace(imageFilePath);
         //TestUtils.ScaleMapFQ(imageFilePath);
         TestUtils.ScaleMapFD(imageFilePath);

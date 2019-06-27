@@ -94,8 +94,8 @@ public class TestUtils {
     }
     
     public static void ScaleMapFD(String imageFilePath) {
-        List<ScaleMappedRMS> ScaleMappedRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleMappedRMSList();
-        ScaleMappedRMSList.stream().forEach(scmr-> System.out.println(scmr.getMatrixScale().getArea()+","+scmr.getRMS()));
+        List<ScaleMappedFluctuations> ScaleMappedRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleMappedRMSList();
+        ScaleMappedRMSList.stream().forEach(scmr-> System.out.println(scmr.getMatrixScale().getArea()+","+scmr.getLogOfQuadraticMeanOfFluctuations()));
     }
     public static void ScaleMapFQ(String imageFilePath) {
         List<ScaleMappedQRMS> scaleMappedQRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getScaleMappedQRMSList();
