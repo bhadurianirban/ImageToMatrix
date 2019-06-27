@@ -39,6 +39,10 @@ public class LinSpace {
         return linSpaceList;
     }
 
+    public Double getDistanceInBetween() {
+        return distanceInBetween;
+    }
+
     
 
 }

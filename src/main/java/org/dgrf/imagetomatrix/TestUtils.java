@@ -6,14 +6,11 @@
 package org.dgrf.imagetomatrix;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
-import org.apache.commons.math3.util.Precision;
-import static org.dgrf.imagetomatrix.TestUtils.ScaleMapFD;
 
 /**
  *
@@ -97,10 +94,28 @@ public class TestUtils {
         List<ScaleMappedFluctuations> ScaleMappedRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleMappedRMSList();
         ScaleMappedRMSList.stream().forEach(scmr-> System.out.println(scmr.getMatrixScale().getArea()+","+scmr.getLogOfQuadraticMeanOfFluctuations()));
     }
-    public static void ScaleMapFQ(String imageFilePath) {
-        List<ScaleMappedQRMS> scaleMappedQRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getScaleMappedQRMSList();
-        scaleMappedQRMSList.stream().forEach(scmr-> System.out.println(scmr.getMatrixScale().getArea()+","+scmr.getqRMS().get(70)));
-    
+    public static void MFWidthForAFile(String imageFilePath) {
+        Double multiFractalSpectrumWidthRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
+        Double multiFractalSpectrumWidthGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
+        Double multiFractalSpectrumWidthBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
+        File imageFile = new File(imageFilePath);
+        System.out.println(imageFile.getName() + "," + multiFractalSpectrumWidthRed + "," + multiFractalSpectrumWidthGreen + "," + multiFractalSpectrumWidthBlue);
+    }
+    public static void MFWidthForFolder(String folderPath) {
+        File folder = new File(folderPath);
+        if (!folder.isDirectory()) {
+            System.out.println("not a folder path");
+        } else {
+            File fileList[] = folder.listFiles();
+            for (File file : fileList) {
+                String imageFilePath = file.getAbsolutePath();
+                MFWidthForAFile(imageFilePath);
+            }
+        }
+    }
+    public static void MFSpectrumForAFile(String imageFilePath,COLORCCHOICE colorcchoice) {
+        List<MultiFractalSpectrum> multiFractalSpectrumList = new ReadImage(imageFilePath).getInputMatrix(colorcchoice).getFQ(Boolean.FALSE).getMultiFractalSpectrumList();
+        multiFractalSpectrumList.stream().forEach(mfs-> System.out.println(mfs.getHq()+","+mfs.getDq()));
     }
     public static void testLinSpace() {
 //        Double columnExponentMin = LogUtil.logBaseK(16);

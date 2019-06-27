@@ -6,6 +6,7 @@
 package org.dgrf.imagetomatrix;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
@@ -44,7 +45,6 @@ public class ScaleMappedFluctuations {
         return quadraticMeanOfFluctuations;
     }
 
-
     public double getLogOfMatrixScale() {
         double area = matrixScale.getArea();
         logOfMatrixScale = LogUtil.logBaseK(area);
@@ -58,5 +58,40 @@ public class ScaleMappedFluctuations {
         logOfQuadraticMeanOfFluctuations = LogUtil.logBaseK(quadraticMeanOfFluctuations);
         return logOfQuadraticMeanOfFluctuations;
     }
+    public Double getLogOfQPoweredMeanOfFluctuations(Double q) {
+        Double qPoweredMeanOfFluctuations = getQPoweredMeanOfFluctuations(q);
+        Double logOfQPoweredMeanOfFluctuations = LogUtil.logBaseK(qPoweredMeanOfFluctuations);
+        return logOfQPoweredMeanOfFluctuations;
+    }
+    public Double getQPoweredMeanOfFluctuations(Double q) {
+        Double qRMS;
+        List<Double> qPoweredRMS = flucuationsListForAScale.stream().map(mrss -> calcqPower(mrss, q)).collect(Collectors.toList());
+        Double meanQPoweredRMS = qPoweredRMS.stream().mapToDouble(a -> a).average().getAsDouble();
+        if (q == 0) {
+            qRMS = Math.exp(0.5 * meanQPoweredRMS);
+        } else {
+            qRMS = Math.pow(meanQPoweredRMS, 1 / q);
+        }
 
+        return qRMS;
+    }
+
+    private Double calcqPower(Double rms, Double q) {
+        if (q == 0) {
+            if (rms == 0) {
+                return 0.0;
+            } else {
+                Double qPower = Math.log(Math.pow(rms, 2));
+                return qPower;
+            }
+        } else {
+            if (rms == 0) {
+                return 0.0;
+            } else {
+                Double qPower = Math.pow(rms, q);
+                return qPower;
+            }
+        }
+
+    }
 }

@@ -24,6 +24,8 @@ public class Fluctuations {
     protected final Double rowScaleMin;
     protected List<MatrixScale> matrixScales;
     protected final int numberOfScales;
+    
+    protected List<ScaleMappedFluctuations> scaleMappedFluctuationsList;
 
     public Fluctuations(RealMatrix inputMatrix, int numberOfScales) {
         this.inputMatrix = inputMatrix;
@@ -148,7 +150,26 @@ public class Fluctuations {
         return subMatrixCoordinatesList;
     }
 
-    
+    protected void prepareFluctuations() {
+        scaleMappedFluctuationsList = matrixScales.stream().map(ms -> prepareScaleMappedFluctuations(ms)).collect(Collectors.toList());
+    }
+
+    private ScaleMappedFluctuations prepareScaleMappedFluctuations(MatrixScale matrixScale) {
+        List<Double> flucuationsListForAScale = prepareFlucuationsListForAScale(matrixScale);
+        ScaleMappedFluctuations scaleMappedFluctuations = new ScaleMappedFluctuations(matrixScale, flucuationsListForAScale);
+        return scaleMappedFluctuations;
+    }
+
+    protected List<Double>  prepareFlucuationsListForAScale(MatrixScale matrixScale) {
+        List<SubMatrixCoordinates> subMatrixCoordinatesList = prepareSubMatrixCoordinatesForAScale(matrixScale);
+        List<Double> flucuationsListForAScale = subMatrixCoordinatesList.stream().map(m -> prepareMeanResidualSquareForASubmatrix(m)).collect(Collectors.toList());
+        return flucuationsListForAScale;
+    }
+    public List<ScaleMappedFluctuations> getScaleMappedRMSList() {
+        prepareMatrixScales();
+        prepareFluctuations();
+        return scaleMappedFluctuationsList;
+    }
 
     public List<MatrixScale> getScales() {
         prepareMatrixScales();
