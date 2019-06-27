@@ -18,7 +18,7 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
  */
 public class FQ extends Fluctuations {
 
-    private List<ScaleMappedQRMS> scaleMappedQRMSList;
+   
     private List<Double> qLinSpqceList;
     private Double linSpaceDistanceInBetween;
     private List<MultiFractalSpectrum> multiFractalSpectrumList;
