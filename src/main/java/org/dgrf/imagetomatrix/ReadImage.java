@@ -26,20 +26,20 @@ import org.apache.commons.math3.linear.RealMatrix;
 
 public class ReadImage {
 
-    private final String imageFilePath;
+    private final File imageFile;
     private BufferedImage image;
     private RealMatrix colorMatrix;
     private InputMatrix randomWalkMatix;
 
-    public ReadImage(String imageFilePath) {
-        this.imageFilePath = imageFilePath;
+    public ReadImage(File imageFile) {
+        this.imageFile = imageFile;
         
     }
 
     private void readImage(COLORCCHOICE color) {
         try {
             // the line that reads the image file
-            image = ImageIO.read(new File(imageFilePath));
+            image = ImageIO.read(imageFile);
             prepareClourMatrix(color);
 
         } catch (IOException e) {

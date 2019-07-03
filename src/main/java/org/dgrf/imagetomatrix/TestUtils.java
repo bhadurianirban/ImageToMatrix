@@ -64,59 +64,62 @@ public class TestUtils {
         System.out.println(regression.calculateRSquared());
     }
 
-    public static void FAForFolder(String folderPath) {
-        File folder = new File(folderPath);
-        if (!folder.isDirectory()) {
-            System.out.println("not a folder path");
-        } else {
+    public static void FAForFolder(File folder) {
+        if (folder.isDirectory()) {
             File fileList[] = folder.listFiles();
             for (File file : fileList) {
-                String imageFilePath = file.getAbsolutePath();
-                String imageFileName = file.getName();
-                double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-                double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-                double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-                System.out.println(imageFileName + "," + hurstRed + "," + hurstGreen + "," + hurstBlue);
+                FAForFile(file);
+
             }
+        } else if (folder.isFile()) {
+            FAForFile(folder);
         }
+        
+
     }
 
-    public static void FAForFile(String imageFilePath) {
-        File imageFile = new File(imageFilePath);
-        double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-        double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-        double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getMeanSubtrated(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+    public static void FAForFile(File imageFile) {
+
+        double hurstRed = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.RED).getFA(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+        double hurstGreen = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.GREEN).getFA(Boolean.TRUE).getScaleRMSLogFit().getSlope();
+        double hurstBlue = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.BLUE).getFA(Boolean.TRUE).getScaleRMSLogFit().getSlope();
         System.out.println(imageFile.getName() + "," + hurstRed + "," + hurstGreen + "," + hurstBlue);
 
     }
-    
-    public static void ScaleMapFD(String imageFilePath) {
-        List<ScaleMappedFluctuations> ScaleMappedRMSList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleMappedRMSList();
-        ScaleMappedRMSList.stream().forEach(scmr-> System.out.println(scmr.getMatrixScale().getArea()+","+scmr.getLogOfQuadraticMeanOfFluctuations()));
+
+    public static void ScaleMapFD(File imageFile) {
+        List<ScaleMappedFluctuations> ScaleMappedRMSList = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleMappedRMSList();
+        ScaleMappedRMSList.stream().forEach(scmr -> System.out.println(scmr.getMatrixScale().getArea() + "," + scmr.getLogOfQuadraticMeanOfFluctuations()));
     }
-    public static void MFWidthForAFile(String imageFilePath) {
-        Double multiFractalSpectrumWidthRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
-        Double multiFractalSpectrumWidthGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
-        Double multiFractalSpectrumWidthBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
-        File imageFile = new File(imageFilePath);
+
+    public static void MFWidthForAFile(File imageFile) {
+
+        Double multiFractalSpectrumWidthRed = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
+        Double multiFractalSpectrumWidthGreen = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.GREEN).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
+        Double multiFractalSpectrumWidthBlue = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.BLUE).getFQ(Boolean.FALSE).getMultiFractalSpectrumWidth();
+
         System.out.println(imageFile.getName() + "," + multiFractalSpectrumWidthRed + "," + multiFractalSpectrumWidthGreen + "," + multiFractalSpectrumWidthBlue);
     }
-    public static void MFWidthForFolder(String folderPath) {
-        File folder = new File(folderPath);
-        if (!folder.isDirectory()) {
-            System.out.println("not a folder path");
-        } else {
+
+    public static void RunMFWidth(File folder) {
+        if (folder.isDirectory()) {
             File fileList[] = folder.listFiles();
             for (File file : fileList) {
-                String imageFilePath = file.getAbsolutePath();
-                MFWidthForAFile(imageFilePath);
+                MFWidthForAFile(file);
+
             }
+        } else if (folder.isFile()) {
+            MFWidthForAFile(folder);
         }
+        
+
     }
-    public static void MFSpectrumForAFile(String imageFilePath,COLORCCHOICE colorcchoice) {
+
+    public static void MFSpectrumForAFile(File imageFilePath, COLORCCHOICE colorcchoice) {
         List<MultiFractalSpectrum> multiFractalSpectrumList = new ReadImage(imageFilePath).getInputMatrix(colorcchoice).getFQ(Boolean.FALSE).getMultiFractalSpectrumList();
-        multiFractalSpectrumList.stream().forEach(mfs-> System.out.println(mfs.getHq()+","+mfs.getDq()));
+        multiFractalSpectrumList.stream().forEach(mfs -> System.out.println(mfs.getHq() + "," + mfs.getDq()));
     }
+
     public static void testLinSpace() {
 //        Double columnExponentMin = LogUtil.logBaseK(16);
 //        Double columnExponentMax = LogUtil.logBaseK(320);
@@ -130,44 +133,44 @@ public class TestUtils {
 //        }
         LinSpace linSpace = new LinSpace(-5.0, 5.0, 101);
         List<Double> linSpaceList = linSpace.getLinSpaceList();
-        linSpaceList.stream().forEach(m-> {
-               
-                System.out.println(m);
-                
+        linSpaceList.stream().forEach(m -> {
+
+            System.out.println(m);
+
         });
     }
-    public static void testQLinSpace(String imageFilePath) {
-        List<Double> qLinSpaceList  = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getQLinSpaceList();
+
+    public static void testQLinSpace(File imageFile) {
+        List<Double> qLinSpaceList = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.RED).getFQ(Boolean.FALSE).getQLinSpaceList();
         //qLinSpaceList.stream().forEach(System.out::println);
         System.out.println(qLinSpaceList.get(70));
     }
-    public static void printCumulativeMatrixForPictureFile(String imageFilePath) {
+
+    public static void printCumulativeMatrixForPictureFile(File imageFilePath) {
         RealMatrix cum = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getCumulativeMatrix(Boolean.TRUE);
         printMatrix(cum);
     }
-    public static void DFAForFile(String imageFilePath) {
-        File imageFile = new File(imageFilePath);
-        double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
-        double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
-        double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
+
+    public static void DFAForFile(File imageFile) {
+
+        double hurstRed = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
+        double hurstGreen = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.GREEN).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
+        double hurstBlue = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.BLUE).getFD(Boolean.FALSE).getScaleRMSLogFit().getSlope();
         System.out.println(imageFile.getName() + "," + hurstRed + "," + hurstGreen + "," + hurstBlue);
 
     }
-    
-    public static void DFAForFolder(String folderPath) {
-        File folder = new File(folderPath);
-        if (!folder.isDirectory()) {
-            System.out.println("not a folder path");
-        } else {
+
+    public static void RunDFA(File folder) {
+
+        if (folder.isDirectory()) {
             File fileList[] = folder.listFiles();
             for (File file : fileList) {
-                String imageFilePath = file.getAbsolutePath();
-                String imageFileName = file.getName();
-                double hurstRed = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-                double hurstGreen = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.GREEN).getFD(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-                double hurstBlue = new ReadImage(imageFilePath).getInputMatrix(COLORCCHOICE.BLUE).getFD(Boolean.TRUE).getScaleRMSLogFit().getSlope();
-                System.out.println(imageFileName + "," + hurstRed + "," + hurstGreen + "," + hurstBlue);
+                DFAForFile(file);
+
             }
+        } else if (folder.isFile()) {
+            DFAForFile(folder);
         }
+
     }
 }
