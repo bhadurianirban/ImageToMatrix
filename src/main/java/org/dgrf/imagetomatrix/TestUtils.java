@@ -64,17 +64,34 @@ public class TestUtils {
         System.out.println(regression.calculateRSquared());
     }
 
-    public static void FAForFolder(File folder) {
+    public static void RunFA(File folder, boolean details) {
         if (folder.isDirectory()) {
             File fileList[] = folder.listFiles();
+            if (details) {
+                System.out.println("File,Color,LogOfScale,LogOfQuadraticMeanOfFluctuations");
+            } else {
+                System.out.println("File,HurstRed,HurstGreen,HurstBlue");
+            }
             for (File file : fileList) {
-                FAForFile(file);
+                if (details) {
+                    FAScaleVsFluctuations(file, COLORCCHOICE.RED);
+                    FAScaleVsFluctuations(file, COLORCCHOICE.GREEN);
+                    FAScaleVsFluctuations(file, COLORCCHOICE.BLUE);
+                } else {
+                    FAForFile(file);
+                }
 
             }
         } else if (folder.isFile()) {
-            FAForFile(folder);
+            if (details) {
+                FAScaleVsFluctuations(folder, COLORCCHOICE.RED);
+                FAScaleVsFluctuations(folder, COLORCCHOICE.GREEN);
+                FAScaleVsFluctuations(folder, COLORCCHOICE.BLUE);
+            } else {
+                FAForFile(folder);
+            }
+
         }
-        
 
     }
 
@@ -87,9 +104,16 @@ public class TestUtils {
 
     }
 
-    public static void ScaleMapFD(File imageFile) {
-        List<ScaleMappedFluctuations> ScaleMappedRMSList = new ReadImage(imageFile).getInputMatrix(COLORCCHOICE.RED).getFD(Boolean.FALSE).getScaleMappedRMSList();
-        ScaleMappedRMSList.stream().forEach(scmr -> System.out.println(scmr.getMatrixScale().getArea() + "," + scmr.getLogOfQuadraticMeanOfFluctuations()));
+    public static void DFAScaleVsFluctuations(File imageFile, COLORCCHOICE colorcchoice) {
+        List<ScaleMappedFluctuations> ScaleMappedRMSList = new ReadImage(imageFile).getInputMatrix(colorcchoice).getFD(Boolean.FALSE).getScaleMappedRMSList();
+
+        ScaleMappedRMSList.stream().forEach(scmr -> System.out.println(imageFile.getName() + "," + colorcchoice.name() + "," + scmr.getLogOfMatrixScale() + "," + scmr.getLogOfQuadraticMeanOfFluctuations()));
+    }
+
+    public static void FAScaleVsFluctuations(File imageFile, COLORCCHOICE colorcchoice) {
+        List<ScaleMappedFluctuations> ScaleMappedRMSList = new ReadImage(imageFile).getInputMatrix(colorcchoice).getFA(Boolean.FALSE).getScaleMappedRMSList();
+        
+        ScaleMappedRMSList.stream().forEach(scmr -> System.out.println(imageFile.getName() + "," + colorcchoice.name() + "," + scmr.getLogOfMatrixScale() + "," + scmr.getLogOfQuadraticMeanOfFluctuations()));
     }
 
     public static void MFWidthForAFile(File imageFile) {
@@ -101,23 +125,40 @@ public class TestUtils {
         System.out.println(imageFile.getName() + "," + multiFractalSpectrumWidthRed + "," + multiFractalSpectrumWidthGreen + "," + multiFractalSpectrumWidthBlue);
     }
 
-    public static void RunMFWidth(File folder) {
+    public static void RunMFWidth(File folder, boolean details) {
         if (folder.isDirectory()) {
             File fileList[] = folder.listFiles();
+            if (details) {
+                System.out.println("File,Color,Hq,Dq");
+            } else {
+                System.out.println("File,MFWRed,MFWGreen,MFWBlue");
+            }
             for (File file : fileList) {
-                MFWidthForAFile(file);
+                if (details) {
+                    MFSpectrumForAFile(file, COLORCCHOICE.RED);
+                    MFSpectrumForAFile(file, COLORCCHOICE.GREEN);
+                    MFSpectrumForAFile(file, COLORCCHOICE.BLUE);
+                } else {
+                    MFWidthForAFile(file);
+                }
 
             }
         } else if (folder.isFile()) {
-            MFWidthForAFile(folder);
+            if (details) {
+                MFSpectrumForAFile(folder, COLORCCHOICE.RED);
+                MFSpectrumForAFile(folder, COLORCCHOICE.GREEN);
+                MFSpectrumForAFile(folder, COLORCCHOICE.BLUE);
+            } else {
+                MFWidthForAFile(folder);
+            }
         }
-        
 
     }
 
-    public static void MFSpectrumForAFile(File imageFilePath, COLORCCHOICE colorcchoice) {
-        List<MultiFractalSpectrum> multiFractalSpectrumList = new ReadImage(imageFilePath).getInputMatrix(colorcchoice).getFQ(Boolean.FALSE).getMultiFractalSpectrumList();
-        multiFractalSpectrumList.stream().forEach(mfs -> System.out.println(mfs.getHq() + "," + mfs.getDq()));
+    public static void MFSpectrumForAFile(File imageFile, COLORCCHOICE colorcchoice) {
+        List<MultiFractalSpectrum> multiFractalSpectrumList = new ReadImage(imageFile).getInputMatrix(colorcchoice).getFQ(Boolean.FALSE).getMultiFractalSpectrumList();
+
+        multiFractalSpectrumList.stream().forEach(mfs -> System.out.println(imageFile.getName() + "," + colorcchoice.name() + "," + mfs.getHq() + "," + mfs.getDq()));
     }
 
     public static void testLinSpace() {
@@ -160,16 +201,34 @@ public class TestUtils {
 
     }
 
-    public static void RunDFA(File folder) {
+    public static void RunDFA(File folder, boolean details) {
 
         if (folder.isDirectory()) {
             File fileList[] = folder.listFiles();
+            if (details) {
+                System.out.println("File,Color,LogOfScale,LogOfQuadraticMeanOfFluctuations");
+            } else {
+                System.out.println("File,HurstRed,HurstGreen,HurstBlue");
+            }
             for (File file : fileList) {
-                DFAForFile(file);
+                if (details) {
+                    DFAScaleVsFluctuations(file, COLORCCHOICE.RED);
+                    DFAScaleVsFluctuations(file, COLORCCHOICE.GREEN);
+                    DFAScaleVsFluctuations(file, COLORCCHOICE.BLUE);
+                } else {
+                    DFAForFile(file);
+                }
 
             }
         } else if (folder.isFile()) {
-            DFAForFile(folder);
+            if (details) {
+                DFAScaleVsFluctuations(folder, COLORCCHOICE.RED);
+                DFAScaleVsFluctuations(folder, COLORCCHOICE.GREEN);
+                DFAScaleVsFluctuations(folder, COLORCCHOICE.BLUE);
+            } else {
+                DFAForFile(folder);
+            }
+
         }
 
     }

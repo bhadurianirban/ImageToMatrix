@@ -48,16 +48,16 @@ public class Driver {
             System.out.println("No file or folder.");
             System.exit(0);
         }
-
+        boolean details = clip.switchPresent("-d");
         switch (analysisType) {
             case "dfa":
-                TestUtils.RunDFA(input);
+                TestUtils.RunDFA(input,details);
                 break;
             case "mfdfa":
-                TestUtils.RunMFWidth(input);
+                TestUtils.RunMFWidth(input,details);
                 break;
             case "fa":
-                TestUtils.FAForFolder(input);
+                TestUtils.RunFA(input,details);
                 break;
             default:
                 break;
