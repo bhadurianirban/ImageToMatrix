@@ -30,6 +30,7 @@ public class LinSpace {
         for (int i = 1; i < numberOfScales; i++){
             linSpace = linSpace + distanceInBetween;
             linSpaceList.add(Precision.round(linSpace,1));
+            //linSpaceList.add(linSpace);
         }
         
     }

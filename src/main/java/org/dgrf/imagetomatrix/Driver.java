@@ -25,7 +25,16 @@ public class Driver {
         //TestUtils.MFWidthForAFile(imageFilePath);
         //TestUtils.MFSpectrumForAFile(imageFilePath, COLORCCHOICE.RED);
         //TestUtils.TestWithSMallMatrix();
+//        TestUtils.testLinSpace();
+//        Double st = -4.9;
+//        Double ad = 0.1;
+//        Double d= st+ad;
+//        System.out.println(d);
+//        if (d==4.8) {
+//            System.out.println("sss");
+//        }
         parseAndExecute(args);
+        
 
     }
 

@@ -172,8 +172,10 @@ public class TestUtils {
 //            int columnScaleSize = (int) Math.round(Math.pow(2, colomnExpLinSpace1.getLinSpaceList().get(i)));
 //            System.out.println(colomnExpLinSpace1.getLinSpaceList().get(i) + "," + columnScaleSize);
 //        }
+        
         LinSpace linSpace = new LinSpace(-5.0, 5.0, 101);
         List<Double> linSpaceList = linSpace.getLinSpaceList();
+        System.out.println(linSpace.getDistanceInBetween());
         linSpaceList.stream().forEach(m -> {
 
             System.out.println(m);
