@@ -105,8 +105,9 @@ public class Fluctuations {
 
         //System.out.println(ArrayUtils.toString(residuals));
         double meanResidualSquaredSum = residualSquaredSum / totalObservations;
+        double sqrtMeanResidualSquaredSum = Math.pow(meanResidualSquaredSum,0.5);
         //System.out.println(meanResidualSquaredSum);
-        return meanResidualSquaredSum;
+        return sqrtMeanResidualSquaredSum;
     }
 
     protected List<SubMatrixCoordinates> prepareSubMatrixCoordinatesForAScale(MatrixScale matrixScale) {

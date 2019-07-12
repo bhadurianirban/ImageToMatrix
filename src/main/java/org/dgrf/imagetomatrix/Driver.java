@@ -1,8 +1,6 @@
 package org.dgrf.imagetomatrix;
 
 import java.io.File;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.RealMatrix;
 import org.dgrf.cliparser.CLIParser;
 
 /*
